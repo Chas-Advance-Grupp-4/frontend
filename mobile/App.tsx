@@ -3,9 +3,9 @@ import { StyleSheet, Text, View } from "react-native";
 import { Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const navigation = useNavigation();
 
 export default function App() {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <Text>
