@@ -45,7 +45,7 @@ For mobile development:
 
 ## Environment Variables
 
-### PWA (`frontend-pwa/`)
+### PWA (`pwa/`)
 
 Create `.env.local`:
 
@@ -53,7 +53,7 @@ Create `.env.local`:
 VITE_API_BASE_URL=http://localhost:8000
 ```
 
-### Mobile (`frontend-mobile/`)
+### Mobile (`mobile/`)
 
 Use Expo public env var (available at runtime). In `.env` or `app.json`:
 
@@ -85,7 +85,7 @@ const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
    **PWA**
 
    ```bash
-   cd frontend-pwa
+   cd pwa
    npm run dev
    # open the shown URL (usually http://localhost:5173)
    ```
@@ -93,7 +93,7 @@ const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
    **Mobile (Expo)**
 
    ```bash
-   cd frontend-mobile
+   cd mobile
    npm run web         # run on web
    # or:
    npm run ios         # iOS simulator (requires Xcode)
