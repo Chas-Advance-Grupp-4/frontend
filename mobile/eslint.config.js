@@ -11,14 +11,14 @@ export default [
   // Ignore build/artifacts
   {
     ignores: [
-      "node_modules",
-      "dist",
-      "build",
-      "android",
-      "ios",
-      ".expo",
-      ".expo-shared",
-      "web-build",
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/build/**",
+      "**/android/**",
+      "**/ios/**",
+      "**/.expo/**",
+      "**/.expo-shared/**",
+      "**/web-build/**",
     ],
   },
 
