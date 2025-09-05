@@ -47,10 +47,10 @@ ios/
 .env
 .env.local
 .env.*.local
-frontend-pwa/.env
-frontend-pwa/.env.*
-frontend-mobile/.env
-frontend-mobile/.env.*
+pwa/.env
+pwa/.env.*
+mobile/.env
+mobile/.env.*
 
 # Coverage / Tests
 coverage/
