@@ -1,0 +1,30 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "Frontend monorepo for Chas Advance Grupp 4",
+  "private": true,
+  "workspaces": [
+    "common",
+    "customer-frontend",
+    "admin-frontend",
+    "driver-frontend"
+  ],
+  "scripts": {
+    "dev:customer": "npm --workspace customer-frontend run dev",
+    "dev:admin": "npm --workspace admin-frontend run dev",
+    "dev:driver": "npm --workspace driver-frontend run dev",
+    "lint": "npm -w common run lint && npm -w customer-frontend run lint && npm -w admin-frontend run lint && npm -w driver-frontend run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chas-Advance-Grupp-4/frontend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Chas-Advance-Grupp-4/frontend/issues"
+  },
+  "homepage": "https://github.com/Chas-Advance-Grupp-4/frontend#readme"
+}
