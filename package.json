@@ -13,7 +13,7 @@
     "dev:customer": "npm --workspace customer-frontend run dev",
     "dev:admin": "npm --workspace admin-frontend run dev",
     "dev:driver": "npm --workspace driver-frontend run dev",
-    "lint": "npm -w common run lint && npm -w customer-frontend run lint && npm -w admin-frontend run lint && npm -w driver-frontend run lint"
+    "lint": "npm --workspace common run lint && npm --workspace customer-frontend run lint && npm --workspace admin-frontend run lint && npm --workspace driver-frontend run lint"
   },
   "repository": {
     "type": "git",
