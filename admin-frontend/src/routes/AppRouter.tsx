@@ -1,19 +1,43 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider, ProtectedRoute } from "@frontend/common";
 import LoginPage from "../pages/LoginPage";
-
-// demo page
-function Dashboard() {
-  return <div style={{ padding: 16 }}>Admin dashboard (protected)</div>;
-}
+import HealthPage from "../pages/HealthPage";
+import AdminLayout from "../components/layout/AdminLayout";
+import ShipmentsPage from "../pages/ShipmentsPage";
 
 const router = createBrowserRouter([
   { path: "/login", element: <LoginPage /> },
+  { path: "/health", element: <HealthPage /> },
+
   {
     element: <ProtectedRoute redirectTo="/login" />,
-    children: [{ path: "/dashboard", element: <Dashboard /> }],
+    children: [
+      {
+        element: <AdminLayout />, // << navbar lives here
+        children: [
+          { path: "/", element: <ShipmentsPage /> }, // or DashboardPage
+          {
+            path: "/dashboard",
+            element: <div className="p-4">Dashboard (WIP)</div>,
+          },
+          { path: "/shipments", element: <ShipmentsPage /> },
+          { path: "/alerts", element: <div className="p-4">Alerts (WIP)</div> },
+          {
+            path: "/vehicles",
+            element: <div className="p-4">Vehicles (WIP)</div>,
+          },
+          {
+            path: "/customers",
+            element: <div className="p-4">Customers (WIP)</div>,
+          },
+          {
+            path: "/analytics",
+            element: <div className="p-4">Analytics (WIP)</div>,
+          },
+        ],
+      },
+    ],
   },
-  { path: "/", element: <LoginPage /> },
 ]);
 
 export default function AppRouter() {
