@@ -21,7 +21,7 @@ web-build/
 .vite/
 vite.config.timestamp-*
 
-# Expo / React Native
+# Expo / React Native (if drivers-frontend ever goes native)
 .expo-shared/
 android/
 ios/
@@ -43,14 +43,18 @@ ios/
 *.swp
 *.swo
 
-# Env files
+# Env files (all frontends)
 .env
 .env.local
 .env.*.local
-pwa/.env
-pwa/.env.*
-mobile/.env
-mobile/.env.*
+customer-frontend/.env
+customer-frontend/.env.*
+admin-frontend/.env
+admin-frontend/.env.*
+driver-frontend/.env
+driver-frontend/.env.*
+common/.env
+common/.env.*
 
 # Coverage / Tests
 coverage/
