@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
@@ -9,16 +10,14 @@ const __dirname = dirname(__filename);
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/setupTests.ts',
+    css: true,
+  },
   resolve: {
     alias: {
       // points to frontend/common/src from admin-frontend
       "@frontend/common": resolve(__dirname, "../common/src"),
     },
-  },
-  server: {
-    port: 5173,
-  },
-  preview: {
-    port: 4173,
-  },
-});
