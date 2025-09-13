@@ -18,7 +18,7 @@ export default function LoginFormContainer() {
     setLoading(true);
     try {
       await login(form.username.trim(), form.password);
-      nav("/dashboard", { replace: true });
+      nav("/", { replace: true });
     } catch (err: any) {
       setError(err?.message || "Login failed");
     } finally {

@@ -1,5 +1,3 @@
-import Button from "./components/Button";
-
 // types
 export * from "./types/auth";
 
@@ -14,5 +12,5 @@ export { default as ProtectedRoute } from "./hooks/auth/ProtectedRoute";
 
 // components
 export * from "./components/form/Input";
-export * from "./components/form/Input";
 export * from "./components/Card";
+export * from "./components/Button";

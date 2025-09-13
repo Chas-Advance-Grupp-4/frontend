@@ -28,7 +28,7 @@ export default function TopNav() {
     <header className="sticky top-0 z-30 border-b bg-white">
       <div className="mx-auto flex max-w-screen-2xl items-center justify-between px-4 py-3">
         {/* Left: logo + brand */}
-        <NavItem to="/dashboard">
+        <NavItem to="/">
           <div className="flex items-center gap-3">
             <span className="text-base font-semibold text-gray-900">
               logivance 🚛
@@ -38,11 +38,10 @@ export default function TopNav() {
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-1 md:flex">
-          <NavItem to="/dashboard">Dashboard</NavItem>
+          <NavItem to="/">Dashboard</NavItem>
           <NavItem to="/shipments">Shipments</NavItem>
           <NavItem to="/customers">Customers</NavItem>
-          <NavItem to="/vehicles">Vehicles</NavItem>
-          <NavItem to="/alerts">Alerts</NavItem>
+          <NavItem to="/notifications">Notifications</NavItem>
         </nav>
 
         {/* Right: user menu */}
@@ -75,7 +74,7 @@ export default function TopNav() {
       {open && (
         <div className="border-t bg-white px-4 py-2 md:hidden">
           <div className="flex flex-col gap-1">
-            <NavItem to="/dashboard">Dashboard</NavItem>
+            <NavItem to="/">Dashboard</NavItem>
             <NavItem to="/shipments">Shipments</NavItem>
             <NavItem to="/customers">Customers</NavItem>
             <NavItem to="/notifications">Notifications</NavItem>
