@@ -1,0 +1,31 @@
+@layer base {
+  :root {
+    /* Brand colors */
+    --brand-primary: #2563eb;
+    --brand-secondary: #6b7280;
+
+    /* Semantic */
+    --semantic-success: #16a34a;
+    --semantic-warning: #f59e0b;
+    --semantic-error: #dc2626;
+    --semantic-info: #0284c7;
+
+    /* Backgrounds */
+    --bg-default: #f9fafb;
+    --bg-card: #ffffff;
+
+    /* Text */
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --text-on-dark: #ffffff;
+  }
+
+  .dark {
+    --bg-default: #111827;
+    --bg-card: #1f2937;
+
+    --text-primary: #f9fafb;
+    --text-secondary: #9ca3af;
+    --text-on-dark: #ffffff;
+  }
+}
