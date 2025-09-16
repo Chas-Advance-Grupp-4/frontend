@@ -47,7 +47,7 @@ export default function LoginForm({
       <Button
         type="submit"
         loading={loading}
-        className="mt-2 w-full bg-brand-primary text-white hover:bg-blue-700"
+        className="mt-2 w-full bg-brand-primary text-white hover:bg-brand-primary-dark"
       >
         Sign in
       </Button>
