@@ -1,5 +1,4 @@
 import LoginFormContainer from "../components/auth/LoginFormContainer";
-import Button from "@frontend/common/src/components/Button";
 
 export default function LoginPage() {
   return (
