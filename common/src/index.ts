@@ -11,6 +11,6 @@ export { AuthProvider, useAuth } from "./hooks/auth/AuthProvider";
 export { default as ProtectedRoute } from "./hooks/auth/ProtectedRoute";
 
 // components
-export * from "./components/form/Input";
-export * from "./components/Card";
-export * from "./components/Button";
+export { default as Button } from "./components/Button";
+export { default as Card } from "./components/Card";
+export { default as Input } from "./components/form/Input";
