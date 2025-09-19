@@ -6,22 +6,25 @@
 @theme {
   /* Brand colors */
   --color-brand-primary: #2563eb;
-  --color-brand-secondary: #6b7280;
+  --color-brand-accent: #d9d9fe; 
+  --color-brand-secondary: #6b7280; 
+  --color-brand-muted: #dbdde1;
+  
 
   /* Semantic */
-  --color-semantic-success: #16a34a;
-  --color-semantic-warning: #f59e0b;
-  --color-semantic-error: #dc2626;
-  --color-semantic-info: #0284c7;
+  --color-semantic-success: #16a34a; 
+  --color-semantic-warning: #f59e0b; 
+  --color-semantic-error: #dc2626; 
+  --color-semantic-info: #0284c7; 
 
   /* Backgrounds */
-  --color-bg-default: #f9fafb;
-  --color-bg-card: #ffffff;
+  --color-bg-default: #f9fafb; 
+  --color-bg-card: #ffffff; 
 
   /* Text */
-  --color-text-primary: #111827;
-  --color-text-secondary: #6b7280;
-  --color-text-on-dark: #ffffff;
+  --color-text-primary: #111827; 
+  --color-text-secondary: #6b7280; 
+  --color-text-on-dark: #ffffff; 
 }
 
 /* Dark mode overrides */
@@ -35,3 +38,5 @@
     --color-text-on-dark: #ffffff;
   }
 }
+
+
