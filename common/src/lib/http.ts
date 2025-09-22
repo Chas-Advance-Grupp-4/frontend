@@ -17,10 +17,17 @@ export async function http<T = unknown>(
   path: string,
   init?: RequestInit
 ): Promise<T> {
+  const token = localStorage.getItem("access_token"); // <-- get JWT
+
   const res = await fetch(`${getBaseUrl()}${path}`, {
-    headers: { "Content-Type": "application/json", ...(init?.headers || {}) },
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}), // <-- adds token automatically
+      ...(init?.headers || {}),
+    },
     ...init,
   });
+
   if (!res.ok) {
     const msg = await res.text().catch(() => "");
     throw new Error(msg || `${res.status} ${res.statusText}`);
