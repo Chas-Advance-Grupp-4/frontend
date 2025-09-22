@@ -26,5 +26,10 @@
   "bugs": {
     "url": "https://github.com/Chas-Advance-Grupp-4/frontend/issues"
   },
-  "homepage": "https://github.com/Chas-Advance-Grupp-4/frontend#readme"
+  "homepage": "https://github.com/Chas-Advance-Grupp-4/frontend#readme",
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.13",
+    "lucide-react": "^0.544.0",
+    "tailwindcss": "^4.1.13"
+  }
 }

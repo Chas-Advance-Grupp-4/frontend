@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
+// import "./index.css";
+import "../../common/src/theme.css";
 import App from "./App";
 
 // set common base URL getter

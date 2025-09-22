@@ -1,7 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useAuth } from "@frontend/common";
-
+import { useAuth, ToggleTheme } from "@frontend/common";
 function NavItem({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <NavLink
@@ -9,8 +8,8 @@ function NavItem({ to, children }: { to: string; children: React.ReactNode }) {
       className={({ isActive }) =>
         `rounded-md px-3 py-2 text-sm font-medium ${
           isActive
-            ? "bg-blue-50 text-blue-700"
-            : "text-gray-700 hover:bg-gray-50"
+            ? "bg-brand-accent text-brand-primary"
+            : "text-brand-secondary hover:bg-brand-muted"
         }`
       }
     >
@@ -25,12 +24,12 @@ export default function TopNav() {
   const nav = useNavigate();
 
   return (
-    <header className="sticky top-0 z-30 border-b bg-white">
+    <header className="sticky top-0 z-30 border-b bg-bg-default">
       <div className="mx-auto flex max-w-screen-2xl items-center justify-between px-4 py-3">
         {/* Left: logo + brand */}
         <NavItem to="/">
           <div className="flex items-center gap-3">
-            <span className="text-base font-semibold text-gray-900">
+            <span className="text-base font-semibold text-brand-primary">
               logivance 🚛
             </span>
           </div>
@@ -42,11 +41,12 @@ export default function TopNav() {
           <NavItem to="/shipments">Shipments</NavItem>
           <NavItem to="/customers">Customers</NavItem>
           <NavItem to="/notifications">Notifications</NavItem>
+          <ToggleTheme />
         </nav>
 
         {/* Right: user menu */}
         <div className="hidden items-center gap-3 md:flex">
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-text-secondary">
             {user?.email ?? "Signed in"}
           </span>
           <button
@@ -54,7 +54,7 @@ export default function TopNav() {
               logout();
               nav("/login", { replace: true });
             }}
-            className="rounded-md border px-3 py-1.5 text-sm hover:bg-gray-50"
+            className="rounded-md border px-3 py-1.5 text-sm text-text-primary hover:bg-brand-muted"
           >
             Sign out
           </button>
@@ -72,14 +72,15 @@ export default function TopNav() {
 
       {/* Mobile nav panel */}
       {open && (
-        <div className="border-t bg-white px-4 py-2 md:hidden">
+        <div className="border-t bg-bg-card px-4 py-2 md:hidden">
           <div className="flex flex-col gap-1">
             <NavItem to="/">Dashboard</NavItem>
             <NavItem to="/shipments">Shipments</NavItem>
             <NavItem to="/customers">Customers</NavItem>
             <NavItem to="/notifications">Notifications</NavItem>
+            <ToggleTheme />
             <button
-              className="mt-2 rounded-md border px-3 py-2 text-left text-sm hover:bg-gray-50"
+              className="mt-2 rounded-md border px-3 py-2 text-left text-sm bg-bg-default hover:bg-brand-muted"
               onClick={() => {
                 logout();
                 setOpen(false);
