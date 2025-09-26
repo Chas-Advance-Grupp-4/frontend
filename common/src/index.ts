@@ -14,3 +14,4 @@ export { default as ProtectedRoute } from "./hooks/auth/ProtectedRoute";
 export { default as Button } from "./components/Button";
 export { default as Card } from "./components/Card";
 export { default as Input } from "./components/form/Input";
+export { default as ToggleTheme } from "./components/ToggleTheme";
