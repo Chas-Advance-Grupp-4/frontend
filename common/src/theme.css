@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tailwindcss/utilities";
 
 /* Define a custom dark variant */
 @custom-variant dark (&:where(.dark, .dark *));
@@ -33,10 +34,31 @@
     --color-bg-default: #111827;
     --color-bg-card: #1f2937;
 
+    --color-brand-accent: #3c3c41;
+
     --color-text-primary: #f9fafb;
     --color-text-secondary: #9ca3af;
     --color-text-on-dark: #ffffff;
   }
 }
 
+/* Card Styles */
+.card {
+  background-color: var(--color-brand-accent);
+  border-radius: 0.5rem; /* Tailwind's rounded-md */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Tailwind's shadow-lg */
+  min-width: 12rem;
+}
+
+.card-title {
+  color: var(--color-text-primary);
+}
+
+.card-subtitle {
+  color: var(--color-text-secondary);
+}
+
+.card-text {
+  color: var(--color-text-primary);
+}
 
