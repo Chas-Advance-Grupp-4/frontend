@@ -1,40 +1,15 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import HealthPage from "../pages/HealthPage";
-import HomePage from "../pages/HomePage";
-import LoginPage from "../pages/LoginPage";
+import { Outlet } from "react-router-dom";
+import BottomNav from "./BottomNav";
+import SettingsNav from "./SettingsNav";
 
-const router = createBrowserRouter([
-	{ path: "/login", element: <LoginPage /> },
-	{ path: "/health", element: <HealthPage /> },
-
-	{
-		element: <ProtectedRoute redirectTo="/login" />,
-		children: [
-			{
-				element: <CustomerLayout />,
-				children: [
-					{
-						path: "/",
-						element: <DashboardPage />,
-					},
-					{
-						path: "/shipments",
-						element: <div className="p-4">Shipments (WIP)</div>,
-					},
-					{
-						path: "/customers",
-						element: <div className="p-4">Customers (WIP)</div>,
-					},
-					{
-						path: "/notifications",
-						element: <div className="p-4">Notifications (WIP)</div>,
-					},
-				],
-			},
-		],
-	},
-]);
-
-export default function AppRouter() {
-	return <RouterProvider router={router} />;
+export default function CustomerLayout() {
+	return (
+		<div className="min-h-screen">
+			<SettingsNav />
+			<main className="mx-auto max-w-screen-2xl px-4 py-6">
+				<Outlet />
+			</main>
+			<BottomNav />
+		</div>
+	);
 }

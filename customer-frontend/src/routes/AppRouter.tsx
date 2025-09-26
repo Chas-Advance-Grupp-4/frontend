@@ -1,40 +1,43 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { AuthProvider } from "@frontend/common"; //ProtectedRoute 
+import LoginPage from "../pages/LoginPage";
 import HealthPage from "../pages/HealthPage";
 import HomePage from "../pages/HomePage";
-import LoginPage from "../pages/LoginPage";
+import MyParcels from "../pages/MyParcels";
+import CustomerLayout from "../components/layout/CustomerLayout";
 
 const router = createBrowserRouter([
 	{ path: "/login", element: <LoginPage /> },
 	{ path: "/health", element: <HealthPage /> },
 
-	{
-		element: <ProtectedRoute redirectTo="/login" />,
-		children: [
+	// {
+	// 	element: <ProtectedRoute redirectTo="/login" />,
+	// 	children: [
 			{
 				element: <CustomerLayout />,
 				children: [
 					{
 						path: "/",
-						element: <DashboardPage />,
+						element: <HomePage />,
 					},
 					{
-						path: "/shipments",
-						element: <div className="p-4">Shipments (WIP)</div>,
+						path: "/parcels",
+						element: <MyParcels />,
 					},
 					{
-						path: "/customers",
-						element: <div className="p-4">Customers (WIP)</div>,
+						path: "/parcels",
+						element: <MyParcels />,
 					},
-					{
-						path: "/notifications",
-						element: <div className="p-4">Notifications (WIP)</div>,
-					},
-				],
-			},
+			// 	],
+			// },
 		],
 	},
 ]);
 
 export default function AppRouter() {
-	return <RouterProvider router={router} />;
+	return (
+		<AuthProvider storageKey="customer_auth">
+			<RouterProvider router={router} />
+		</AuthProvider>
+	);
 }
