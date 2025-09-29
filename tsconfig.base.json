@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
-    "paths": {
-      "@frontend/common/*": ["common/src/*"]
-    },
     "baseUrl": ".",
+    "paths": {
+      "@frontend/common/*": ["common/src/*"],
+      "@frontend/common": ["common/src"],
+      "@admin-frontend/*": ["admin-frontend/src/*"],
+      "@admin-frontend": ["admin-frontend/src"],
+    },
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "node",
