@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: [admin-frontend, customer-frontend, driver-frontend]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        working-directory: ${{ matrix.project }}
+        run: npm install
+
+      - name: Lint
+        working-directory: ${{ matrix.project }}
+        run: npm run lint
+
+      - name: Test
+        working-directory: ${{ matrix.project }}
+        run: npm test --if-present
+
+      - name: Build
+        working-directory: ${{ matrix.project }}
+        run: npm run build
