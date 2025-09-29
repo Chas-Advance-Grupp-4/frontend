@@ -28,14 +28,16 @@ export default function LoginForm({
         placeholder="Username"
         autoComplete="username"
         value={username}
-        onChange={(e) => onUsernameChange(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+        onUsernameChange(e.target.value)}
       />
       <Input
         type="password"
         placeholder="Password"
         autoComplete="current-password"
         value={password}
-        onChange={(e) => onPasswordChange(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+        onPasswordChange(e.target.value)}
       />
 
       {error && (
