@@ -19,8 +19,8 @@ export default function LoginFormContainer() {
     try {
       await login(form.username.trim(), form.password);
       nav("/", { replace: true });
-    } catch (err: any) {
-      setError(err?.message || "Login failed");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Login failed");
     } finally {
       setLoading(false);
     }
