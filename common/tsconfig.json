@@ -1,11 +1,24 @@
+// {
+//   "extends": "../tsconfig.base.json",
+//   "compilerOptions": {
+//     "composite": true,
+//     "outDir": "dist",
+//     "rootDir": "src",
+//     "declarationMap": true
+//   },
+//   "include": ["src"],
+//   "exclude": ["node_modules", "dist"]
+// }
 {
-  "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "composite": true,
-    "outDir": "dist",
-    "rootDir": "src",
-    "declarationMap": true
+    "baseUrl": "src",
+    "paths": {
+      "@frontend/common/*": ["*"]
+    },
+    "esModuleInterop": true,  // Enable interoperability with CommonJS modules
+    "composite": true,        // Required for project references
+    "jsx": "react-jsx"       // Ensure JSX is supported
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }

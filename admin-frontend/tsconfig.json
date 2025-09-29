@@ -1,15 +1,22 @@
+// {
+//   "files": [],
+//   "references": [
+//      { "path": "../common/tsconfig.json" },
+//     { "path": "./tsconfig.app.json" },
+//     { "path": "./tsconfig.node.json" }
+//   ],
+// }
 {
   "files": [],
   "references": [
-     { "path": "../common/tsconfig.json" },
+    { "path": "../common" },
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
   ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@frontend/common/*": ["../common/src/*"]
+    }
+  }
 }
-// {
-//   "extends": "../tsconfig.base.json",
-//   "compilerOptions": {
-//     "outDir": "dist"
-//   },
-//   "include": ["src"]
-// }
