@@ -20,7 +20,7 @@ function NavItem({ to, children }: { to: string; children: React.ReactNode }) {
 	);
 }
 
-export default function SettingsNav() {
+export default function OptionsNav() {
 	const [open, setOpen] = useState(false);
 	const { user, logout } = useAuth();
 	const nav = useNavigate();
@@ -39,7 +39,6 @@ export default function SettingsNav() {
 
 				{/* Desktop nav */}
 				<nav className="hidden items-center gap-1 md:flex">
-					<NavItem to="/order">Order</NavItem>
 					<NavItem to="/settings">Account settings</NavItem>
 					<NavItem to="/support">Support</NavItem>
 					<ToggleTheme />
@@ -68,7 +67,7 @@ export default function SettingsNav() {
 					aria-label="Toggle navigation"
 				>
 					<Cog8ToothIcon className="h-5 w-5 md:h-6 md:w-6" />
-					<span>Settings</span>
+					<span>Options</span>
 				</button>
 			</div>
 

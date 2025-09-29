@@ -1,7 +1,7 @@
 export default function ScanParcel() {
 	return (
 		<div className="text-center">
-			<h1>Scan parcel on arrival</h1>
+			<h1>Scan your parcel on arrival — signed, sealed, delivered! 📦✨</h1>
 		</div>
 	);
 }

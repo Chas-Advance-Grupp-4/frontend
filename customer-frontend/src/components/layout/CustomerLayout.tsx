@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import BottomNav from "./BottomNav";
-import SettingsNav from "./SettingsNav";
+import SettingsNav from "./OptionsNav";
 
 export default function CustomerLayout() {
 	return (
