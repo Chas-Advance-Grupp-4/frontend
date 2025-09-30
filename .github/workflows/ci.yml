@@ -22,6 +22,14 @@ jobs:
         with:
           node-version: '18'
         #  cache: 'npm'
+      
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
 
       - name: Install dependencies
         working-directory: ${{ matrix.project }}
@@ -33,7 +41,7 @@ jobs:
 
       - name: Test
         working-directory: ${{ matrix.project }}
-        run: npm test --if-present
+        run: npm test -- --ci
 
       - name: Build
         working-directory: ${{ matrix.project }}
