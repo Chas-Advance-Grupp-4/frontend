@@ -26,6 +26,7 @@
 /* Outline Variant */
 .btn-outline {
 	border: 1px solid;
+	border-color: var(--color-text-secondary);
 	background-color: transparent;
 	color: var(--color-text-primary);
 }
