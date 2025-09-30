@@ -52,57 +52,31 @@ const DashboardPage: React.FC = () => {
 					</Card>
 				))}
 			</section>
-			<section>
+			<section className="display flex flex-col items-center gap-4 p-6">
 				<h1>Button Variants</h1>
 				<div className="flex flex-wrap justify-center gap-4">
+					{/* Primary Buttons */}
 					<Button variant="primary" appearance="filled">
 						Primary Button
 					</Button>
 					<Button variant="primary" appearance="outline">
 						Primary Outline
 					</Button>
-					<Button variant="primary" appearance="ghost">
-						Primary Ghost
-					</Button>
 
+					{/* Secondary Buttons */}
 					<Button variant="secondary" appearance="filled">
 						Secondary Button
 					</Button>
 					<Button variant="secondary" appearance="outline">
 						Secondary Outline
 					</Button>
-					<Button variant="secondary" appearance="ghost">
-						Secondary Ghost
-					</Button>
 
+					{/* Danger Buttons */}
 					<Button variant="danger" appearance="filled">
 						Danger Button
 					</Button>
 					<Button variant="danger" appearance="outline">
 						Danger Outline
-					</Button>
-					<Button variant="danger" appearance="ghost">
-						Danger Ghost
-					</Button>
-
-					<Button variant="success" appearance="filled">
-						Success Button
-					</Button>
-					<Button variant="success" appearance="outline">
-						Success Outline
-					</Button>
-					<Button variant="success" appearance="ghost">
-						Success Ghost
-					</Button>
-
-					<Button variant="warning" appearance="filled">
-						Warning Button
-					</Button>
-					<Button variant="warning" appearance="outline">
-						Warning Outline
-					</Button>
-					<Button variant="warning" appearance="ghost">
-						Warning Ghost
 					</Button>
 				</div>
 			</section>

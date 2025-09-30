@@ -1,0 +1,98 @@
+@import "../theme.css";
+
+/* Base Button Styles */
+.btn {
+	border-radius: 0.5rem;
+	padding: 0.5rem 1rem;
+	font-weight: 500;
+	transition: background-color 0.2s, color 0.2s, opacity 0.2s;
+	opacity: 1;
+	color: var(--color-text-primary);
+	background-color: var(--color-bg-card);
+}
+.btn:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+/* Filled Variant */
+.btn-filled {
+	color: var(--color-text-on-dark); /* Always white text */
+}
+.btn-filled:hover {
+	opacity: 0.9;
+}
+
+/* Outline Variant */
+.btn-outline {
+	border: 1px solid;
+	background-color: transparent;
+	color: var(--color-text-primary);
+}
+.btn-outline:hover {
+	opacity: 0.8;
+}
+
+/* Primary Variant */
+.btn-primary-filled {
+	background-color: var(--color-brand-primary);
+	color: var(--color-text-on-dark); /* Always white text */
+}
+.btn-primary-outline {
+	color: var(--color-brand-primary);
+	border-color: var(--color-brand-primary);
+}
+
+/* Secondary Variant */
+.btn-secondary-filled {
+	background-color: var(--color-brand-secondary);
+	color: var(--color-text-on-dark); /* Always white text */
+}
+.btn-secondary-outline {
+	color: var(--color-brand-secondary);
+	border-color: var(--color-brand-secondary);
+}
+
+/* Danger Variant */
+.btn-danger-filled {
+	background-color: var(--color-semantic-error);
+	color: var(--color-text-on-dark); /* Always white text */
+}
+.btn-danger-outline {
+	color: var(--color-semantic-error);
+	border-color: var(--color-semantic-error);
+}
+
+/* Dark Mode Overrides */
+.dark .btn {
+	color: var(--color-text-primary);
+	background-color: var(--color-bg-card);
+}
+.dark .btn-outline {
+	color: var(--color-text-primary);
+	border-color: var(--color-text-secondary);
+}
+.dark .btn-primary-filled {
+	background-color: var(--color-brand-primary);
+	color: var(--color-text-on-dark); /* Always white text */
+}
+.dark .btn-primary-outline {
+	color: var(--color-brand-primary);
+	border-color: var(--color-brand-primary);
+}
+.dark .btn-secondary-filled {
+	background-color: var(--color-brand-secondary);
+	color: var(--color-text-on-dark); /* Always white text */
+}
+.dark .btn-secondary-outline {
+	color: var(--color-brand-secondary);
+	border-color: var(--color-brand-secondary);
+}
+.dark .btn-danger-filled {
+	background-color: var(--color-semantic-error);
+	color: var(--color-text-on-dark); /* Always white text */
+}
+.dark .btn-danger-outline {
+	color: var(--color-semantic-error);
+	border-color: var(--color-semantic-error);
+}
