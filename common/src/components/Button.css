@@ -16,12 +16,6 @@
 }
 
 /* Filled Variant */
-.btn-filled {
-	color: var(--color-text-on-dark); /* Always white text */
-}
-.btn-filled:hover {
-	opacity: 0.9;
-}
 
 /* Outline Variant */
 .btn-outline {
