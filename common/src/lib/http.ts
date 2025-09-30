@@ -15,22 +15,33 @@ export function setBaseUrlGetter(fn: BaseUrlGetter) {
 
 export async function http<T = unknown>(
 	path: string,
-	init?: RequestInit
+	init: RequestInit = {}
 ): Promise<T> {
-	const token = localStorage.getItem("access_token");
+	const token = localStorage.getItem("access_token"); // get JWT
 
 	const res = await fetch(`${getBaseUrl()}${path}`, {
+		...init,
 		headers: {
 			"Content-Type": "application/json",
 			...(token ? { Authorization: `Bearer ${token}` } : {}),
-			...(init?.headers || {}),
+			...(init.headers || {}), // <-- merge user headers last (allows override)
 		},
-		...init,
 	});
 
 	if (!res.ok) {
-		const msg = await res.text().catch(() => "");
-		throw new Error(msg || `${res.status} ${res.statusText}`);
+		let msg: string;
+		try {
+			msg = (await res.json()).detail ?? (await res.text());
+		} catch {
+			msg = `${res.status} ${res.statusText}`;
+		}
+		throw new Error(msg);
 	}
+
+	// Handle empty responses (e.g. DELETE 204 No Content)
+	if (res.status === 204) {
+		return undefined as T;
+	}
+
 	return res.json() as Promise<T>;
 }
