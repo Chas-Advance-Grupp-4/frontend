@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@frontend/common";
+import { useAuth } from "../../../../common/src/hooks/auth/AuthProvider";
 import LoginForm from "./LoginForm";
 
 export default function LoginFormContainer() {

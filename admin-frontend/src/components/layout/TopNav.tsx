@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useAuth, ToggleTheme } from "@frontend/common/src";
+import { useAuth } from "../../../../common/src/hooks/auth/AuthProvider";
+import ToggleTheme from "../../../../common/src/components/ToggleTheme";
 function NavItem({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <NavLink

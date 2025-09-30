@@ -1,7 +1,7 @@
 // UI for login form
 
-import Input from "@frontend/common/src/components/form/Input";
-import Button from "@frontend/common/src/components/Button";
+import Input from "../../../../common/src/components/form/Input";
+import Button from "../../../../common/src/components/Button";
 
 type LoginFormProps = {
   username: string;
