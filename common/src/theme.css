@@ -1,42 +1,62 @@
 @import "tailwindcss";
+@import "tailwindcss/utilities";
 
 /* Define a custom dark variant */
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Brand colors */
-  --color-brand-primary: #2563eb;
-  --color-brand-accent: #d9d9fe; 
-  --color-brand-secondary: #6b7280; 
-  --color-brand-muted: #dbdde1;
-  
+	/* Brand colors */
+	--color-brand-primary: #2563eb;
+	--color-brand-accent: #d9d9fe;
+	--color-brand-secondary: #6b7280;
+	--color-brand-muted: #dbdde1;
 
-  /* Semantic */
-  --color-semantic-success: #16a34a; 
-  --color-semantic-warning: #f59e0b; 
-  --color-semantic-error: #dc2626; 
-  --color-semantic-info: #0284c7; 
+	/* Semantic */
+	--color-semantic-success: #16a34a;
+	--color-semantic-warning: #f59e0b;
+	--color-semantic-error: #dc2626;
+	--color-semantic-info: #0284c7;
 
-  /* Backgrounds */
-  --color-bg-default: #f9fafb; 
-  --color-bg-card: #ffffff; 
+	/* Backgrounds */
+	--color-bg-default: #f9fafb;
+	--color-bg-card: #ffffff;
 
-  /* Text */
-  --color-text-primary: #111827; 
-  --color-text-secondary: #6b7280; 
-  --color-text-on-dark: #ffffff; 
+	/* Text */
+	--color-text-primary: #111827;
+	--color-text-secondary: #6b7280;
+	--color-text-on-dark: #ffffff;
 }
 
 /* Dark mode overrides */
 @layer base {
-  .dark {
-    --color-bg-default: #111827;
-    --color-bg-card: #1f2937;
+	.dark {
+		--color-bg-default: #111827;
+		--color-bg-card: #1f2937;
 
-    --color-text-primary: #f9fafb;
-    --color-text-secondary: #9ca3af;
-    --color-text-on-dark: #ffffff;
-  }
+		--color-brand-accent: #3c3c41;
+
+		--color-text-primary: #f9fafb;
+		--color-text-secondary: #9ca3af;
+		--color-text-on-dark: #ffffff;
+	}
 }
 
+/* Card Styles */
+.card {
+	background-color: var(--color-brand-accent);
+	border-radius: 0.5rem; /* Tailwind's rounded-md */
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Tailwind's shadow-lg */
+	min-width: 12rem;
+}
 
+.card-title {
+	color: var(--color-text-primary);
+}
+
+.card-subtitle {
+	color: var(--color-text-secondary);
+}
+
+.card-text {
+	color: var(--color-text-primary);
+}

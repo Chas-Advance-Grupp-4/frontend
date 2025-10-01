@@ -1,18 +1,23 @@
 import { http } from "./http";
-import type { LoginResponse } from "../types/auth";
+import type { LoginResponse, User } from "../types/auth";
 
+// Login returns JWT + user info
 export async function login(
-  username: string,
-  password: string
+	username: string,
+	password: string
 ): Promise<LoginResponse> {
-  return http<LoginResponse>("/api/v1/auth/login", {
-    method: "POST",
-    body: JSON.stringify({ username, password }),
-  });
+	return http<LoginResponse>("/api/v1/auth/login", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ username, password }),
+	});
 }
 
-export async function me() {
-  return http("/api/v1/auth/me", { method: "GET" });
+// Me fetches the current logged-in user
+export async function me(): Promise<User> {
+	return http<User>("/api/v1/auth/me", { method: "GET" });
 }
 
 // TEMP MOCK – remove once API is live
