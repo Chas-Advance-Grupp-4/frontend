@@ -1,5 +1,5 @@
 import React from "react";
-import Card from "@frontend/common/src/components/Card";
+import { Card, Button } from "@frontend/common";
 
 const deliveries = [
 	{
@@ -50,6 +50,34 @@ const DashboardPage: React.FC = () => {
 						<p>ETA: {d.eta}</p>
 					</Card>
 				))}
+			</section>
+			<section className="display flex flex-col items-center gap-4 p-6">
+				<h1>Button Variants</h1>
+				<div className="flex flex-wrap justify-center gap-4">
+					{/* Primary Buttons */}
+					<Button variant="primary" appearance="filled">
+						Primary Button
+					</Button>
+					<Button variant="primary" appearance="outline">
+						Primary Outline
+					</Button>
+
+					{/* Secondary Buttons */}
+					<Button variant="secondary" appearance="filled">
+						Secondary Button
+					</Button>
+					<Button variant="secondary" appearance="outline">
+						Secondary Outline
+					</Button>
+
+					{/* Danger Buttons */}
+					<Button variant="danger" appearance="filled">
+						Danger Button
+					</Button>
+					<Button variant="danger" appearance="outline">
+						Danger Outline
+					</Button>
+				</div>
 			</section>
 		</div>
 	);
