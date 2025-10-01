@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/Chas-Advance-Grupp-4/frontend#readme",
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@tailwindcss/vite": "^4.1.13",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.544.0",
