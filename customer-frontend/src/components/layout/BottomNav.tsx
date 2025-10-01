@@ -56,7 +56,7 @@ function BottomNav() {
 						`flex flex-col items-center text-xs md:text-sm px-4 py-2 rounded-2xl transition-all duration-300 ${
 							isActive
 								? "bg-brand-accent text-white shadow-lg scale-105"
-								: "bg-brand-primary text-white hover:bg-brand-accent hover:color-text-secondary hover:shadow-md"
+								: "bg-brand-primary text-white hover:bg-brand-accent hover:text-text-secondary hover:shadow-md"
 						}`
 					}
 				>
