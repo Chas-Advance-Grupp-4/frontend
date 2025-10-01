@@ -39,7 +39,7 @@ export default function LoginForm({
       />
 
       {error && (
-        <div className="rounded-md px-3 py-2 text-sm text-semantic-error" style={{ backgroundColor: "var(--semantic-error, #f00)", opacity: 0.1 }}>
+        <div className="rounded-md px-3 py-2 text-sm text-semantic-error bg-semantic-error-faint">
           {error}
         </div>
       )}
