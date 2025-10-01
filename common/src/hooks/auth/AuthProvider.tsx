@@ -1,5 +1,3 @@
-// manages { token, user }, persists to storage, exposes login/logout
-
 import React, {
 	createContext,
 	useContext,
@@ -7,7 +5,7 @@ import React, {
 	useMemo,
 	useState,
 } from "react";
-import type { LoginResponse, User } from "../../types/auth";
+import type { User, Role } from "../../types/users";
 import { login as apiLogin } from "../../lib/authApi";
 import { getJSON, setJSON, remove } from "../../lib/storage";
 import { jwtDecode } from "jwt-decode";
@@ -21,9 +19,9 @@ type AuthContextValue = {
 };
 
 type JwtPayload = {
+	sub: string; // user id
+	role: string;
 	exp: number;
-	iat?: number;
-	sub?: string;
 };
 
 const AuthCtx = createContext<AuthContextValue | null>(null);
@@ -59,14 +57,19 @@ export function AuthProvider({ children, storageKey = "auth" }: Props) {
 	}, [storageKey]);
 
 	const login = async (username: string, password: string) => {
-		const data: LoginResponse = await apiLogin(username, password);
+		const data = await apiLogin(username, password); // returns { access_token, token_type }
+		const decoded = jwtDecode<JwtPayload>(data.access_token);
+
+		const user: User = {
+			id: decoded.sub,
+			username, // optional, backend doesn’t return it
+			role: decoded.role as Role, // or use a mapping function if necessary
+			created_at: new Date().toISOString(),
+		};
+
 		setToken(data.access_token);
-		setUser(data.user);
-		setJSON(
-			"session",
-			{ token: data.access_token, user: data.user },
-			storageKey
-		);
+		setUser(user);
+		setJSON("session", { token: data.access_token, user }, storageKey);
 	};
 
 	const logout = () => {

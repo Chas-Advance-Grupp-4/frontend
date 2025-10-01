@@ -1,16 +1,14 @@
 import { http } from "./http";
-import type { LoginResponse, User } from "../types/auth";
+import type { LoginResponse, User } from "../types/users";
 
-// Login returns JWT + user info
+// Login returns JWT only
 export async function login(
 	username: string,
 	password: string
-): Promise<LoginResponse> {
-	return http<LoginResponse>("/api/v1/auth/login", {
+): Promise<{ access_token: string }> {
+	return http<{ access_token: string }>("/api/v1/auth/login", {
 		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
+		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify({ username, password }),
 	});
 }

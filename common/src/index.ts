@@ -1,5 +1,5 @@
 // types
-export * from "./types/auth";
+export * from "./types/users";
 
 // lib
 export * from "./lib/http";
