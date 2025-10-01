@@ -10,7 +10,7 @@ const router = createBrowserRouter([
 	{ path: "/login", element: <LoginPage /> },
 
 	{
-		element: <ProtectedRoute redirectTo="/login" />,
+		element: <ProtectedRoute roles={["customer"]} redirectTo="/login" />,
 		children: [
 			{
 				element: <CustomerLayout />,

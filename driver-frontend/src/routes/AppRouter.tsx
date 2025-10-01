@@ -10,7 +10,7 @@ const router = createBrowserRouter([
 	{ path: "/login", element: <LoginPage /> },
 
 	{
-		element: <ProtectedRoute redirectTo="/login" />,
+		element: <ProtectedRoute roles={["driver"]} redirectTo="/login" />,
 		children: [
 			{
 				element: <DriverLayout />,

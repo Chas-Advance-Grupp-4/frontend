@@ -9,7 +9,7 @@ import {
 function BottomNav() {
 	return (
 		<footer className="fixed bottom-0 w-full z-30 bg-bg-default border-t border-gray-200">
-			<nav className="flex justify-center space-x-20 items-center px-4 py-2 h-[70px] md:h-[80px]">
+			<nav className="flex justify-center space-x-10 items-center px-4 py-2 h-[70px] md:h-[80px]">
 				{/* Home */}
 				<NavLink
 					to="/"

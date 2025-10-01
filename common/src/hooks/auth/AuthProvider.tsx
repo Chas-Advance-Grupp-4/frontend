@@ -1,5 +1,3 @@
-// manages { token, user }, persists to storage, exposes login/logout
-
 import React, {
 	createContext,
 	useContext,
@@ -7,8 +5,8 @@ import React, {
 	useMemo,
 	useState,
 } from "react";
-import type { LoginResponse, User } from "../../types/auth";
-import { login as apiLogin } from "../../lib/authApi";
+import type { User, Role, LoginResponse } from "../../types/auth";
+import { login as apiLogin, me as apiMe } from "../../lib/authApi";
 import { getJSON, setJSON, remove } from "../../lib/storage";
 import { jwtDecode } from "jwt-decode";
 
@@ -21,9 +19,9 @@ type AuthContextValue = {
 };
 
 type JwtPayload = {
+	sub: string; // user id
+	role: string;
 	exp: number;
-	iat?: number;
-	sub?: string;
 };
 
 const AuthCtx = createContext<AuthContextValue | null>(null);
@@ -59,14 +57,21 @@ export function AuthProvider({ children, storageKey = "auth" }: Props) {
 	}, [storageKey]);
 
 	const login = async (username: string, password: string) => {
+		// 1. Call backend login → returns { access_token, token_type }
 		const data: LoginResponse = await apiLogin(username, password);
+
+		// 2a. Store token in state
 		setToken(data.access_token);
-		setUser(data.user);
-		setJSON(
-			"session",
-			{ token: data.access_token, user: data.user },
-			storageKey
-		);
+
+		// 2b. Store token in localStorage
+		localStorage.setItem("access_token", data.access_token);
+
+		// 3. Immediately call /auth/me with the token
+		const user: User = await apiMe();
+
+		// 4. Store user and persist session
+		setUser(user);
+		setJSON("session", { token: data.access_token, user }, storageKey);
 	};
 
 	const logout = () => {
