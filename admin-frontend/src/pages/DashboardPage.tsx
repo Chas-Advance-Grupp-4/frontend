@@ -1,6 +1,5 @@
 import React from "react";
-import { Card } from "@frontend/common";
-import { Button } from "@frontend/common";
+import { Card, Button } from "@frontend/common";
 
 const deliveries = [
 	{
