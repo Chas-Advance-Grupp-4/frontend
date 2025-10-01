@@ -1,9 +1,11 @@
 // types
-export * from "./types/users";
+export * from "./types/auth";
+export * from "./types/shipment";
 
 // lib
 export * from "./lib/http";
 export * from "./lib/authApi";
+export * from "./lib/shipmentApi";
 export * from "./lib/storage";
 
 // auth
