@@ -53,7 +53,7 @@ export default function MyParcels() {
 					{expecting.map((s) => (
 						<Card
 							key={s.id}
-							title={s.shipment}
+							title={s.shipment_number}
 							subtitle={`Created: ${new Date(
 								s.created_at
 							).toLocaleDateString()}`}
@@ -80,7 +80,7 @@ export default function MyParcels() {
 					{sent.map((s) => (
 						<Card
 							key={s.id}
-							title={s.shipment}
+							title={s.shipment_number}
 							subtitle={`Created: ${new Date(
 								s.created_at
 							).toLocaleDateString()}`}
