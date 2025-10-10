@@ -1,5 +1,5 @@
 export interface Shipment {
-	shipment: string;
+	shipment_number: string;
 	sender_id: string;
 	receiver_id: string;
 	driver_id: string | null;
