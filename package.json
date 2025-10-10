@@ -14,7 +14,9 @@
 		"dev:admin": "npm --workspace admin-frontend run dev",
 		"dev:driver": "npm --workspace driver-frontend run dev",
 		"lint": "npm --workspace common run lint && npm --workspace customer-frontend run lint && npm --workspace admin-frontend run lint && npm --workspace driver-frontend run lint",
-		"test": "vitest"
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:coverage": "vitest run --coverage"
 	},
 	"repository": {
 		"type": "git",

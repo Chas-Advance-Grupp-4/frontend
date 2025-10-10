@@ -1,38 +1,41 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { useAuth } from "@frontend/common";
 import { useNavigate } from "react-router-dom";
 import LoginFormContainer from "./LoginFormContainer";
 
-// Mock dependencies
 vi.mock("@frontend/common", () => ({
 	useAuth: vi.fn(),
 }));
+
 vi.mock("react-router-dom", () => ({
 	useNavigate: vi.fn(),
 }));
-vi.mock("./LoginForm", () => (props: any) => (
-	<div>
-		<input
-			data-testid="username-input"
-			value={props.username}
-			onChange={(e) => props.onUsernameChange(e.target.value)}
-		/>
-		<input
-			data-testid="password-input"
-			value={props.password}
-			onChange={(e) => props.onPasswordChange(e.target.value)}
-		/>
-		<button
-			data-testid="submit-button"
-			onClick={props.onSubmit}
-			disabled={props.loading}
-		>
-			Submit
-		</button>
-		{props.error && <div data-testid="error-message">{props.error}</div>}
-	</div>
-));
+
+vi.mock("./LoginForm", () => ({
+	default: (props: any) => (
+		<div>
+			<input
+				data-testid="username-input"
+				value={props.username}
+				onChange={(e) => props.onUsernameChange(e.target.value)}
+			/>
+			<input
+				data-testid="password-input"
+				value={props.password}
+				onChange={(e) => props.onPasswordChange(e.target.value)}
+			/>
+			<button
+				data-testid="submit-button"
+				onClick={props.onSubmit}
+				disabled={props.loading}
+			>
+				Submit
+			</button>
+			{props.error && <div data-testid="error-message">{props.error}</div>}
+		</div>
+	),
+}));
 
 describe("LoginFormContainer", () => {
 	const mockLogin = vi.fn();
@@ -64,7 +67,7 @@ describe("LoginFormContainer", () => {
 	});
 
 	it("handles successful login", async () => {
-		mockLogin.mockResolvedValueOnce(undefined); // simulates a successful log in
+		mockLogin.mockResolvedValueOnce(undefined);
 		render(<LoginFormContainer />);
 
 		const usernameInput = screen.getByTestId("username-input");
@@ -76,12 +79,12 @@ describe("LoginFormContainer", () => {
 		fireEvent.click(submitButton);
 
 		expect(mockLogin).toHaveBeenCalledWith("testuser", "password123");
-		await screen.findByTestId("submit-button"); // Wait until button is re-enabled
+		await screen.findByTestId("submit-button");
 		expect(mockNavigate).toHaveBeenCalledWith("/", { replace: true });
 	});
 
 	it("handles failed login", async () => {
-		mockLogin.mockRejectedValueOnce(new Error("Invalid credentials")); // Simulera misslyckad inloggning
+		mockLogin.mockRejectedValueOnce(new Error("Invalid credentials"));
 		render(<LoginFormContainer />);
 
 		const usernameInput = screen.getByTestId("username-input");
