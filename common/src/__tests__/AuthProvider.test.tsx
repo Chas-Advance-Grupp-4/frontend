@@ -78,3 +78,25 @@ describe("AuthProvider", () => {
 		expect(remove).toHaveBeenCalledWith("session", expect.any(String));
 	});
 });
+
+it("restores session from storage on mount if valid token", async () => {
+	const mockUser = {
+		id: "1",
+		username: "restoredUser",
+		role: "customer",
+		created_at: new Date().toISOString(),
+	};
+
+	// Mock stored session
+	(getJSON as vi.Mock).mockReturnValue({
+		token: "stored-token",
+		user: mockUser,
+	});
+
+	// jwtDecode returns a valid token (not expired)
+	const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
+
+	expect(result.current.token).toBe("stored-token");
+	expect(result.current.user).toEqual(mockUser);
+	expect(result.current.ready).toBe(true);
+});
