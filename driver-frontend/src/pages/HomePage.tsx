@@ -44,7 +44,7 @@ import Deliveries from "./Deliveries";
 const HomePage: React.FC = () => {
   return (
     <div className="bg-bg-default">
-        <h1 className="p-6 space-y-4 text-text-primary">Your Deliveries</h1>
+        <h1 className="text-2xl text-text-primary font-bold mb-6 text-center">Deliveries 📦</h1>
         <Deliveries />
       <BottomNav />
     </div>

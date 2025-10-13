@@ -27,7 +27,7 @@ export default function Deliveries() {
 	}, []);
 
 	if (loading) {
-		return <p className="text-center p-4">Loading…</p>;
+		return <p className="text-center p-4">Loading deliveries…</p>;
 	}
 
 	if (error) {
@@ -35,20 +35,29 @@ export default function Deliveries() {
 	}
 
 	if (shipments.length === 0) {
-		return <p className="text-center p-4">No deliveries 📭</p>;
+		return <p className="text-center p-4">No assigned deliveries 🚚</p>;
 	}
-	// Separate shipments to "to pick up", "on board", and "delivered"
-	const toPickUp = shipments.filter((s) => s.sender_id === user?.id);
-	const onBoard = shipments.filter((s) => s.receiver_id === user?.id);
-	const delivered = shipments.filter((s) => s.status === "Delivered");
+
+	// filter shipments for the driver
+	const assignedToMe = shipments.filter((s) => s.driver_id === user?.id);
+	
+	// group shipments into categories
+	const toPickUp = assignedToMe.filter((s) => !s.sensor_unit_id);
+	const inTransit = assignedToMe.filter((s) => s.sensor_unit_id);
+	const delivered: Shipment[] = [];
+
+	// // Separate shipments to "to pick up", "on board", and "delivered"
+	// const toPickUp = shipments.filter((s) => s.sender_id === user?.id);
+	// const onBoard = shipments.filter((s) => s.receiver_id === user?.id);
+	// const delivered = shipments.filter((s) => s.status === "Delivered");
 
     return (
         	<div className="p-6">
-			<h1 className="text-2xl text-text-primary font-bold mb-6 text-center">Deliveries 📦</h1>
+			
 			{/* To pick up */}
 			<h2 className="text-xl text-text-primary font-semibold mt-6 mb-2">Pick-up</h2>
 			{toPickUp.length === 0 ? (
-				<p className="text-sm text-gray-500 mb-4">No pick ups</p>
+				<p className="text-sm text-gray-500 mb-4">No parcels to pick up</p>
 			) : (
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-around">
 					{toPickUp.map((s) => (
@@ -74,11 +83,11 @@ export default function Deliveries() {
 
 			{/* On Board the truck*/}
 			<h2 className="text-xl text-text-primary font-semibold mt-8 mb-2">On Board</h2>
-			{onBoard.length === 0 ? (
-				<p className="text-sm text-gray-500 mb-4">No parcels on board</p>
+			{inTransit.length === 0 ? (
+				<p className="text-sm text-gray-500 mb-4">No parcels currently in transit</p>
 			) : (
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-around">
-					{onBoard.map((s) => (
+					{inTransit.map((s) => (
 						<Card
 							key={s.id}
 							title={s.shipment_number}
