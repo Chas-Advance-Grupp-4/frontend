@@ -54,4 +54,40 @@ describe("ProtectedRoute", () => {
 
 		expect(screen.getByTestId("login-page")).toBeInTheDocument();
 	});
+
+	it("blocks access after logout", () => {
+		// Logged in user should see protected content
+		(useAuth as vi.Mock).mockReturnValueOnce({
+			token: "mock-token",
+			user: { id: "1", role: "customer" },
+			ready: true,
+		});
+
+		const { rerender } = render(
+			<MemoryRouter initialEntries={["/dashboard"]}>
+				<ProtectedRoute>
+					<div data-testid="protected-content">Protected</div>
+				</ProtectedRoute>
+			</MemoryRouter>
+		);
+
+		expect(screen.getByTestId("protected-content")).toBeInTheDocument();
+
+		// Simulate logout
+		(useAuth as vi.Mock).mockReturnValueOnce({
+			token: null,
+			ready: true,
+		});
+
+		rerender(
+			<MemoryRouter initialEntries={["/dashboard"]}>
+				<ProtectedRoute>
+					<div data-testid="protected-content">Protected</div>
+				</ProtectedRoute>
+			</MemoryRouter>
+		);
+
+		// Check that protected content is gone
+		expect(screen.queryByTestId("protected-content")).not.toBeInTheDocument();
+	});
 });
