@@ -10,6 +10,49 @@ export default function Deliveries() {
   const [shipments, setShipments] = useState<Shipment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+//   const mockShipments: Shipment[] = [
+//   {
+//     id: "1",
+//     shipment_number: "SHIP-001",
+//     sender_id: "11111111-aaaa-bbbb-cccc-111111111111",
+//     receiver_id: "22222222-aaaa-bbbb-cccc-222222222222",
+//     driver_id: "33333333-aaaa-bbbb-cccc-333333333333",
+//     sensor_unit_id: "sensor-123",
+//     status: "in_transit",
+//     created_at: new Date("2025-10-01T09:30:00Z").toISOString(),
+//   },
+//   {
+//     id: "2",
+//     shipment_number: "SHIP-002",
+//     sender_id: "11111111-aaaa-bbbb-cccc-111111111111",
+//     receiver_id: "22222222-aaaa-bbbb-cccc-222222222222",
+//     driver_id: "33333333-aaaa-bbbb-cccc-333333333333",
+//     sensor_unit_id: "sensor-456",
+//     status: "delivered",
+//     created_at: new Date("2025-09-29T14:00:00Z").toISOString(),
+//   },
+//   {
+//     id: "3",
+//     shipment_number: "SHIP-003",
+//     sender_id: "55555555-aaaa-bbbb-cccc-555555555555",
+//     receiver_id: "66666666-aaaa-bbbb-cccc-666666666666",
+//     driver_id: "33333333-aaaa-bbbb-cccc-333333333333",
+//     sensor_unit_id: null,
+//     status: "cancelled",
+//     created_at: new Date("2025-09-27T12:15:00Z").toISOString(),
+//   },
+// ];
+
+// useEffect(() => {
+//   // Simulate async API delay
+//   const timer = setTimeout(() => {
+//     setShipments(mockShipments);
+//     setLoading(false);
+//   }, 500);
+
+//   return () => clearTimeout(timer);
+// }, []);
   
 	useEffect(() => {
 		const fetchShipments = async () => {
@@ -46,10 +89,10 @@ export default function Deliveries() {
 	const inTransit = assignedToMe.filter((s) => s.sensor_unit_id);
 	const delivered: Shipment[] = [];
 
-	// // Separate shipments to "to pick up", "on board", and "delivered"
-	// const toPickUp = shipments.filter((s) => s.sender_id === user?.id);
-	// const onBoard = shipments.filter((s) => s.receiver_id === user?.id);
-	// const delivered = shipments.filter((s) => s.status === "Delivered");
+	// const toPickUp = assignedToMe.filter((s) => s.status === "assigned" || s.status === "created");
+	// const inTransit = assignedToMe.filter((s) => s.status === "in_transit");
+	// const delivered = assignedToMe.filter((s) => s.status === "delivered");
+	const cancelled = assignedToMe.filter((s) => s.status === "cancelled");
 
     return (
         	<div className="p-6">
@@ -108,7 +151,7 @@ export default function Deliveries() {
 				</div>
 			)}
 
-						{/*Delivery history */}
+			{/*Delivery history */}
 			<h2 className="text-xl text-text-primary font-semibold mt-8 mb-2">Delivery History</h2>
 			{delivered.length === 0 ? (
 				<p className="text-sm text-gray-500 mb-4">No parcels delivered...yet!</p>
@@ -133,6 +176,25 @@ export default function Deliveries() {
 						</Card>
 					))}
 				</div>
+			)}
+
+			{/* Cancelled */}
+			{cancelled.length > 0 && (
+				<>
+				<h2 className="text-xl font-semibold mt-8 mb-2 text-red-600">Cancelled</h2>
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+					{cancelled.map((s) => (
+					<Card key={s.id} title={s.shipment_number}>
+						<p className="text-sm text-gray-600">
+						<strong>Sender:</strong> {s.sender_id.slice(0, 8)}…
+						</p>
+						<p className="text-sm text-gray-600">
+						<strong>Receiver:</strong> {s.receiver_id.slice(0, 8)}…
+						</p>
+					</Card>
+					))}
+				</div>
+				</>
 			)}
 		</div>
     );
