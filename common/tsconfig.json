@@ -1,3 +1,14 @@
+// {
+//   "extends": "../tsconfig.base.json",
+//   "compilerOptions": {
+//     "composite": true,
+//     "outDir": "dist",
+//     "rootDir": "src",
+//     "declarationMap": true
+//   },
+//   "include": ["src"],
+//   "exclude": ["node_modules", "dist"]
+// }
 {
 	"extends": "../tsconfig.base.json",
 	"compilerOptions": {

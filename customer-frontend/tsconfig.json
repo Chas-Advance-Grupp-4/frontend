@@ -5,3 +5,10 @@
     { "path": "./tsconfig.node.json" }
   ]
 }
+// {
+//   "extends": "../tsconfig.base.json",
+//   "compilerOptions": {
+//     "outDir": "dist"
+//   },
+//   "include": ["src"]
+// }
