@@ -6,4 +6,5 @@ export interface Shipment {
 	id: string;
 	created_at: string;
 	sensor_unit_id?: string | null;
+	status: "created" | "assigned" | "in_transit" | "delivered" | "cancelled";
 }
