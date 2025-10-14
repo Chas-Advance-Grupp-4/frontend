@@ -5,4 +5,5 @@ export interface Shipment {
 	driver_id: string | null;
 	id: string;
 	created_at: string;
+	sensor_unit_id?: string | null;
 }
