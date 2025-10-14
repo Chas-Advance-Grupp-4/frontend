@@ -1,0 +1,26 @@
+services:
+
+  # admin frontend services
+  admin-frontend:
+    build: ./admin-frontend
+    container_name: admin-frontend
+    ports:
+      - "3001:80"
+    restart: unless-stopped
+
+
+  # customer frontend services
+  customer-frontend:
+    build: ./customer-frontend
+    container_name: customer-frontend
+    ports:
+      - "3002:80"
+    restart: unless-stopped
+
+    # driver frontend services
+  driver-frontend:
+      build: ./driver-frontend
+      container_name: driver-frontend
+      ports:
+        - "3003:80" 
+      restart: unless-stopped

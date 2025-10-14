@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+body {
+  @apply bg-gray-50 text-gray-900 antialiased;
+
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  @apply text-blue-600 hover:text-blue-700 underline;
+}
+
+button {
+  @apply rounded-lg px-4 py-2 font-medium transition-colors;
+}
