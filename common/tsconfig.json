@@ -9,14 +9,31 @@
 //   "include": ["src"],
 //   "exclude": ["node_modules", "dist"]
 // }
+// {
+// 	"extends": "../tsconfig.base.json",
+// 	"compilerOptions": {
+// 		"composite": true,
+// 		"outDir": "dist",
+// 		"rootDir": "src",
+// 		"declarationMap": true
+// 	},
+// 	"include": ["src"],
+// 	"exclude": ["node_modules", "dist"]
+// }
 {
-	"extends": "../tsconfig.base.json",
-	"compilerOptions": {
-		"composite": true,
-		"outDir": "dist",
-		"rootDir": "src",
-		"declarationMap": true
-	},
-	"include": ["src"],
-	"exclude": ["node_modules", "dist"]
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,             // required for project references
+    "declaration": true,           // ensures .d.ts files are emitted
+    "declarationMap": true,        // enables source maps for declarations
+    "outDir": "dist",
+    "rootDir": "src",
+    "module": "ESNext",
+    "target": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }
