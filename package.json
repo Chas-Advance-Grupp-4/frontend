@@ -35,6 +35,8 @@
     "tailwindcss": "^4.1.13"
   },
   "devDependencies": {
-    "@types/jest": "^30.0.0"
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.8.1",
+    "vitest": "^3.2.4"
   }
 }
