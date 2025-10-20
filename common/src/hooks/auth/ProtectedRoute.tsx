@@ -3,12 +3,14 @@ import { useAuth } from "./AuthProvider";
 
 type Props = {
 	redirectTo?: string;
-	roles?: string[]; // allowed roles, e.g. ["admin"]
+	roles?: string[];
+	children?: React.ReactNode;
 };
 
 export default function ProtectedRoute({
 	redirectTo = "/login",
 	roles,
+	children,
 }: Props) {
 	const { token, user, ready } = useAuth();
 
@@ -20,9 +22,10 @@ export default function ProtectedRoute({
 	}
 
 	if (roles && user && !roles.includes(user.role)) {
-		// Logged in, but role not allowed → send to "forbidden" or homepage
+		// Logged in but not allowed → redirect to home (or forbidden)
 		return <Navigate to="/" replace />;
 	}
 
-	return <Outlet />;
+	// hybrid: render children if provided, otherwise <Outlet />
+	return <>{children || <Outlet />}</>;
 }
