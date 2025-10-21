@@ -1,10 +1,10 @@
-{
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
-}
+// {
+//   "files": [],
+//   "references": [
+//     { "path": "./tsconfig.app.json" },
+//     { "path": "./tsconfig.node.json" }
+//   ]
+// }
 // {
 //   "extends": "../tsconfig.base.json",
 //   "compilerOptions": {
@@ -12,3 +12,16 @@
 //   },
 //   "include": ["src"]
 // }
+{
+  "compilerOptions": {
+    "moduleResolution": "bundler", // or "node16"/"nodenext"
+    "module": "esnext",
+    "target": "esnext",
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@frontend/common/*": ["../common/src/*"]
+    },
+    "types": ["jest", "@testing-library/jest-dom"]
+  }
+}
