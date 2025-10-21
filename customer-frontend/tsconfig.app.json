@@ -1,26 +1,55 @@
+// {
+// 	"compilerOptions": {
+// 		"target": "ES2022",
+// 		"lib": ["DOM", "DOM.Iterable", "ES2022"],
+// 		"module": "ESNext",
+// 		"moduleResolution": "Bundler",
+// 		"jsx": "react-jsx",
+
+// 		"strict": true,
+// 		"noEmit": true,
+// 		"isolatedModules": true,
+
+// 		"esModuleInterop": true,
+// 		"allowSyntheticDefaultImports": true,
+// 		"resolveJsonModule": true,
+// 		"skipLibCheck": true,
+// 		"forceConsistentCasingInFileNames": true,
+
+// 		"baseUrl": ".",
+// 		"paths": {
+// 			"@/*": ["./src/*"]
+// 		}
+// 	},
+// 	"include": ["src", "src/env.d.ts", "../common/src/components/auth"],
+// 	"exclude": ["node_modules", "dist"]
+// }
 {
-	"compilerOptions": {
-		"target": "ES2022",
-		"lib": ["DOM", "DOM.Iterable", "ES2022"],
-		"module": "ESNext",
-		"moduleResolution": "Bundler",
-		"jsx": "react-jsx",
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
 
-		"strict": true,
-		"noEmit": true,
-		"isolatedModules": true,
+    "strict": true,
+    "noEmit": true,
+    "isolatedModules": true,
 
-		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
-		"resolveJsonModule": true,
-		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
 
-		"baseUrl": ".",
-		"paths": {
-			"@/*": ["./src/*"]
-		}
-	},
-	"include": ["src", "src/env.d.ts", "../common/src/components/auth"],
-	"exclude": ["node_modules", "dist"]
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@frontend/common/*": ["../common/src/*"]  // <-- added path for common
+    }
+  },
+  "include": ["src", "src/env.d.ts"],  // remove specific common folder
+  "exclude": ["node_modules", "dist", "**/__tests__", "**/*.test.ts", "**/*.test.tsx"],
+  "references": [{ "path": "../common" }]  // <-- add project reference
 }
