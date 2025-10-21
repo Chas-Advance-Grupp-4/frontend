@@ -1,18 +1,23 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { useAuth } from "@frontend/common";
 import { useNavigate } from "react-router-dom";
-import LoginFormContainer from "./LoginFormContainer";
+import LoginFormContainer from "../components/auth/LoginFormContainer";
+import "@testing-library/jest-dom";
 
+// Mock dependencies
 vi.mock("@frontend/common", () => ({
 	useAuth: vi.fn(),
+	Input: (props: any) => <input {...props} />, // mock for Input component
+	Button: (props: any) => <button {...props} />, // mock for Button
 }));
 
 vi.mock("react-router-dom", () => ({
 	useNavigate: vi.fn(),
 }));
 
-vi.mock("./LoginForm", () => ({
+// Mock LoginForm component used by LoginFormContainer
+vi.mock("../components/auth/LoginForm", () => ({
 	default: (props: any) => (
 		<div>
 			<input
@@ -70,13 +75,13 @@ describe("LoginFormContainer", () => {
 		mockLogin.mockResolvedValueOnce(undefined);
 		render(<LoginFormContainer />);
 
-		const usernameInput = screen.getByTestId("username-input");
-		const passwordInput = screen.getByTestId("password-input");
-		const submitButton = screen.getByTestId("submit-button");
-
-		fireEvent.change(usernameInput, { target: { value: "testuser" } });
-		fireEvent.change(passwordInput, { target: { value: "password123" } });
-		fireEvent.click(submitButton);
+		fireEvent.change(screen.getByTestId("username-input"), {
+			target: { value: "testuser" },
+		});
+		fireEvent.change(screen.getByTestId("password-input"), {
+			target: { value: "password123" },
+		});
+		fireEvent.click(screen.getByTestId("submit-button"));
 
 		expect(mockLogin).toHaveBeenCalledWith("testuser", "password123");
 		await screen.findByTestId("submit-button");
@@ -87,13 +92,13 @@ describe("LoginFormContainer", () => {
 		mockLogin.mockRejectedValueOnce(new Error("Invalid credentials"));
 		render(<LoginFormContainer />);
 
-		const usernameInput = screen.getByTestId("username-input");
-		const passwordInput = screen.getByTestId("password-input");
-		const submitButton = screen.getByTestId("submit-button");
-
-		fireEvent.change(usernameInput, { target: { value: "testuser" } });
-		fireEvent.change(passwordInput, { target: { value: "wrongpassword" } });
-		fireEvent.click(submitButton);
+		fireEvent.change(screen.getByTestId("username-input"), {
+			target: { value: "testuser" },
+		});
+		fireEvent.change(screen.getByTestId("password-input"), {
+			target: { value: "wrongpassword" },
+		});
+		fireEvent.click(screen.getByTestId("submit-button"));
 
 		expect(mockLogin).toHaveBeenCalledWith("testuser", "wrongpassword");
 		const errorMessage = await screen.findByTestId("error-message");
