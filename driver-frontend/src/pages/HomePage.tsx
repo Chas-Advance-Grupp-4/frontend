@@ -1,4 +1,6 @@
-import BottomNav from "../components/layout/BottomNav";
+import BottomNav from "@/components/layout/BottomNav";
+import { Button, Card } from "@frontend/common";
+import PickUp from "./Deliveries";
 import Deliveries from "./Deliveries";
 
 // const deliveries = [

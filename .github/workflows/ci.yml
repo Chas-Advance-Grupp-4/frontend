@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - 85-7111-set-up-ci-workflow-for-frontend
+      - develop
   pull_request:
 
 jobs:
@@ -24,10 +24,8 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
+        working-directory: ${{ matrix.project }}
         run: npm install
-
-      - name: Build common workspace 
-        run: npm run build --workspace common
 
       - name: Lint
         working-directory: ${{ matrix.project }}
@@ -38,7 +36,5 @@ jobs:
         run: npm test --if-present
 
       - name: Build
-        run: npm run build --workspace  ${{ matrix.project }}
-
-
-        # another test
+        working-directory: ${{ matrix.project }}
+        run: npm run build
