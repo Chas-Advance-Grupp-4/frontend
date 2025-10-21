@@ -10,49 +10,6 @@ export default function Deliveries() {
   const [shipments, setShipments] = useState<Shipment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-//   const mockShipments: Shipment[] = [
-//   {
-//     id: "1",
-//     shipment_number: "SHIP-001",
-//     sender_id: "11111111-aaaa-bbbb-cccc-111111111111",
-//     receiver_id: "22222222-aaaa-bbbb-cccc-222222222222",
-//     driver_id: "33333333-aaaa-bbbb-cccc-333333333333",
-//     sensor_unit_id: "sensor-123",
-//     status: "in_transit",
-//     created_at: new Date("2025-10-01T09:30:00Z").toISOString(),
-//   },
-//   {
-//     id: "2",
-//     shipment_number: "SHIP-002",
-//     sender_id: "11111111-aaaa-bbbb-cccc-111111111111",
-//     receiver_id: "22222222-aaaa-bbbb-cccc-222222222222",
-//     driver_id: "33333333-aaaa-bbbb-cccc-333333333333",
-//     sensor_unit_id: "sensor-456",
-//     status: "delivered",
-//     created_at: new Date("2025-09-29T14:00:00Z").toISOString(),
-//   },
-//   {
-//     id: "3",
-//     shipment_number: "SHIP-003",
-//     sender_id: "55555555-aaaa-bbbb-cccc-555555555555",
-//     receiver_id: "66666666-aaaa-bbbb-cccc-666666666666",
-//     driver_id: "33333333-aaaa-bbbb-cccc-333333333333",
-//     sensor_unit_id: null,
-//     status: "cancelled",
-//     created_at: new Date("2025-09-27T12:15:00Z").toISOString(),
-//   },
-// ];
-
-// useEffect(() => {
-//   // Simulate async API delay
-//   const timer = setTimeout(() => {
-//     setShipments(mockShipments);
-//     setLoading(false);
-//   }, 500);
-
-//   return () => clearTimeout(timer);
-// }, []);
   
 	useEffect(() => {
 		const fetchShipments = async () => {
@@ -85,14 +42,14 @@ export default function Deliveries() {
 	const assignedToMe = shipments.filter((s) => s.driver_id === user?.id);
 	
 	// group shipments into categories
-	const toPickUp = assignedToMe.filter((s) => !s.sensor_unit_id);
-	const inTransit = assignedToMe.filter((s) => s.sensor_unit_id);
-	const delivered: Shipment[] = [];
+	// const toPickUp = assignedToMe.filter((s) => !s.sensor_unit_id);
+	// const inTransit = assignedToMe.filter((s) => s.sensor_unit_id);
+	// const delivered: Shipment[] = [];
 
-	// const toPickUp = assignedToMe.filter((s) => s.status === "assigned" || s.status === "created");
-	// const inTransit = assignedToMe.filter((s) => s.status === "in_transit");
-	// const delivered = assignedToMe.filter((s) => s.status === "delivered");
-	const cancelled = assignedToMe.filter((s) => s.status === "cancelled");
+	const toPickUp = assignedToMe.filter((s) => s.status === "ASSIGNED" || s.status === "CREATED");
+	const inTransit = assignedToMe.filter((s) => s.status === "IN_TRANSIT");
+	const delivered = assignedToMe.filter((s) => s.status === "DELIVERED");
+	const cancelled = assignedToMe.filter((s) => s.status === "CANCELLED");
 
     return (
         	<div className="p-6">
