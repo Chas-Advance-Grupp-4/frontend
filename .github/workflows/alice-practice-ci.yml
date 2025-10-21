@@ -1,0 +1,47 @@
+name: Alice Practice CI
+
+on:
+  push:
+    branches:
+      - alice
+  pull_request:
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      ## Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      ## Set up node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      ## Set up node.js environment
+      - name: Install dependencies
+        run: npm install
+
+      ## Building the project
+      - name: Build the project
+        run: npm run build
+
+      ## Running linting checks
+      - name: Run ESLint
+        run: npm run lint
+
+      ## Formatting code
+      - name: Run Prettier
+        run: npm run format
+
+      ## Performing type checks
+      - name: Run TypeScript check
+        run: npm run tsc
+
+      ## Running tests
+      - name: Run tests
+        run: npm test --if-present
