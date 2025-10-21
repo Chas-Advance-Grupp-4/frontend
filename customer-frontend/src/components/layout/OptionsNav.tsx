@@ -47,7 +47,7 @@ export default function OptionsNav() {
 				{/* Right: user menu */}
 				<div className="hidden items-center gap-3 md:flex">
 					<span className="text-sm text-text-secondary">
-						{user?.email ?? "Signed in"}
+						{user?.username ?? "Signed in"}
 					</span>
 					<button
 						onClick={() => {

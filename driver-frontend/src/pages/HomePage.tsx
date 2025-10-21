@@ -1,4 +1,4 @@
-import BottomNav from "@/components/layout/BottomNav";
+import BottomNav from "../components/layout/BottomNav";
 import Deliveries from "./Deliveries";
 
 // const deliveries = [
