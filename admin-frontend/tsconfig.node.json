@@ -4,7 +4,6 @@
     "composite": true,
     "module": "ESNext",
     "moduleResolution": "Bundler"
-    // "outDir": "dist"
   },
   "include": ["vite.config.ts"]
 }

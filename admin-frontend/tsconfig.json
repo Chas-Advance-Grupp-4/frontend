@@ -1,14 +1,7 @@
 {
-  "compilerOptions": {
-    "moduleResolution": "bundler", // or "node16"/"nodenext"
-    "module": "esnext",
-    "target": "esnext",
-    "jsx": "react-jsx",
-    "baseUrl": ".",
-    "paths": {
-      "@frontend/common/*": ["../common/src/*"]
-    },
-    "types": ["jest", "@testing-library/jest-dom"]
-  }
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
 }
-// test

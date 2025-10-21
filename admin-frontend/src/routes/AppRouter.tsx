@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import {AuthProvider} from "../../../common/src/hooks/auth/AuthProvider";
-import ProtectedRoute from "../../../common/src/hooks/auth/ProtectedRoute";
+import { AuthProvider, ProtectedRoute } from "@frontend/common";
 import LoginPage from "../pages/LoginPage";
 import AdminLayout from "../components/layout/AdminLayout";
 import DashboardPage from "../pages/DashboardPage";
