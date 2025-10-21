@@ -24,7 +24,6 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        working-directory: ${{ matrix.project }}
         run: npm install
 
       - name: Lint
@@ -36,8 +35,7 @@ jobs:
         run: npm test --if-present
 
       - name: Build
-        working-directory: ${{ matrix.project }}
-        run: npm run build
+        run: npm run build --workspace  ${{ matrix.project }}
 
 
         # another test
