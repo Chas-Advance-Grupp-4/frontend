@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-// import AppRouter from "./routes/AppRouter";
+import AppRouter from "./routes/AppRouter";
 import "@frontend/common/src/theme.css";
 import App from "./App";
 

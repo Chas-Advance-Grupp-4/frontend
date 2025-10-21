@@ -1,9 +1,8 @@
 {
 	"compilerOptions": {
-		"composite": true,
 		"target": "ES2022",
 		"module": "ESNext",
-		"moduleResolution": "bundler", //"node",
+		"moduleResolution": "node",
 		"esModuleInterop": true,
 		"jsx": "react-jsx",
 		"strict": true,
