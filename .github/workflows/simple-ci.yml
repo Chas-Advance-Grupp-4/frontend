@@ -1,0 +1,44 @@
+name: Simple CI
+
+on:
+  push:
+    branches:
+      - common-experiment
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: [admin-frontend, customer-frontend, driver-frontend]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint
+        run: npm run lint --if-present
+
+      - name: Test
+        run: npm test --if-present
+
+      - name: Build admin app
+        working-directory: ./admin-frontend
+        run: npm run build
+
+      - name: Build customer app
+        working-directory: ./customer-frontend
+        run: npm run build
+
+      - name: Build driver app
+        working-directory: ./driver-frontend
+        run: npm run build
