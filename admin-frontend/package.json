@@ -9,6 +9,7 @@
 		"lint": "eslint .",
 		"preview": "vite preview"
 	},
-	"dependencies": {},
-	"devDependencies": {}
+	"devDependencies": {
+		"vitest": "^3.2.4"
+	}
 }
