@@ -6,5 +6,12 @@
 		"jsx": "react-jsx",
 		"types": ["vitest", "node"]
 	},
-	"include": ["src", "test", "vitest.setup.ts", "/*.spec.ts", "/*.spec.tsx"]
+	"include": [
+		"src",
+		"test",
+		"vitest.setup.ts",
+		"/*.spec.ts",
+		"/*.spec.tsx",
+		"./common/src"
+	]
 }
