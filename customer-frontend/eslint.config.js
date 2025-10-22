@@ -22,8 +22,6 @@ export default tseslint.config([
 ]);
 
 module.exports = {
-	// other configurations
-
 	parserOptions: {
 		tsconfigRootDir: __dirname,
 	},
