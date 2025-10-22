@@ -2,8 +2,21 @@
 	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
 		"outDir": "dist",
-		"rootDir": "../",
-		"jsx": "react-jsx"
+		"rootDir": ".",
+		"jsx": "react-jsx",
+		"noEmit": true,
+		"composite": false,
+		"skipLibCheck": true,
+		"allowSyntheticDefaultImports": true,
+		"resolveJsonModule": true,
+		"moduleResolution": "Node"
 	},
-	"include": ["src", "../common/src"]
+	"include": [
+		"src",
+		"../common/src",
+		"vite.config.ts",
+		"vitest.config.ts",
+		"vitest.setup.ts"
+	],
+	"exclude": ["node_modules", "dist"]
 }

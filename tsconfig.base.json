@@ -1,11 +1,33 @@
 {
 	"compilerOptions": {
+		/* === Grundläggande TypeScript-säkerhet === */
 		"target": "ESNext",
 		"module": "ESNext",
 		"moduleResolution": "Node",
+		"strict": true,
 		"esModuleInterop": true,
-		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
-		"strict": true
-	}
+		"skipLibCheck": true,
+
+		/* === React & JSX === */
+		"jsx": "react-jsx", // 👈 så du slipper sätta detta i varje frontend-projekt
+
+		/* === Paths & upplösning === */
+		"baseUrl": ".", // 👈 gör att paths fungerar för relativa importer i monorepo
+		"resolveJsonModule": true,
+		"allowSyntheticDefaultImports": true,
+
+		/* === För byggbarhet / monorepo === */
+		"composite": true, // 👈 krävs om du använder project references
+		"declaration": true, // skapar typdefinitioner för delade paket (som common)
+		"declarationMap": true,
+
+		/* === Output === */
+		"outDir": "dist",
+		"noEmit": false, // base ska inte bygga själv, men barnprojekt kan ärva detta och ändra till true
+
+		/* === Typer === */
+		"types": ["vite/client", "node"] // 👈 stöd för t.ex. import.meta.env och process.env
+	},
+	"exclude": ["node_modules", "dist"]
 }
