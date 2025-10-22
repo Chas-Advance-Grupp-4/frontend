@@ -4,7 +4,6 @@
 	"description": "Frontend monorepo for Chas Advance Grupp 4",
 	"private": true,
 	"workspaces": [
-		"common",
 		"customer-frontend",
 		"admin-frontend",
 		"driver-frontend"

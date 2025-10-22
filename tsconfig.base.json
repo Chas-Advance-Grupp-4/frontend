@@ -1,25 +1,11 @@
 {
-	"files": [],
-  "references": [
-    { "path": "./common" },
-    { "path": "./customer-frontend" },
-    { "path": "./driver-frontend" },
-    { "path": "./admin-frontend" }
-  ],
 	"compilerOptions": {
-		"target": "ES2022",
+		"target": "ESNext",
 		"module": "ESNext",
-		"moduleResolution": "node",
+		"moduleResolution": "Node",
 		"esModuleInterop": true,
-		"jsx": "react-jsx",
-		"strict": true,
 		"skipLibCheck": true,
-		"allowSyntheticDefaultImports": true,
-		"resolveJsonModule": true,
-		"types": ["vitest"],
-		 "paths": {
-			"@frontend/common": ["./common/src"],
-			"@frontend/common/*": ["./common/src/*"]
-    		}
+		"forceConsistentCasingInFileNames": true,
+		"strict": true
 	}
 }
