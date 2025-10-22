@@ -6,7 +6,24 @@ on:
       - common-experiment
 
 jobs:
-  test-and-build-admin:
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Test
+        run: npm test
+
+  build-admin:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -17,15 +34,12 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-
-      - name: Test
-        run: npm test
 
       - name: Build admin app
         working-directory: ./admin-frontend
         run: npm run build
 
-  test-and-build-customer:
+  build-customer:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -36,15 +50,12 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-
-      - name: Test
-        run: npm test
 
       - name: Build customer app
         working-directory: ./customer-frontend
         run: npm run build
 
-  test-and-build-driver:
+  build-driver:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -55,9 +66,6 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-
-      - name: Test
-        run: npm test
 
       - name: Build driver app
         working-directory: ./driver-frontend
