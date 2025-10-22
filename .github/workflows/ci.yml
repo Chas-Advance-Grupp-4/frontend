@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - common-experiment
   pull_request:
 
 jobs:
