@@ -5,18 +5,19 @@
 		"rootDir": ".",
 		"jsx": "react-jsx",
 		"noEmit": true,
-		"composite": false,
-		"skipLibCheck": true,
-		"allowSyntheticDefaultImports": true,
-		"resolveJsonModule": true,
-		"moduleResolution": "Node"
+		"skipLibCheck": true
 	},
 	"include": [
-		"./src",
-		"../common/src",
-		"vite.config.ts",
-		"vitest.config.ts",
-		"vitest.setup.ts"
+		"src",
+		"../common/src/components",
+		"../common/src/hooks",
+		"../common/src/lib",
+		"../common/src/types"
 	],
-	"exclude": ["node_modules", "dist"]
+	"exclude": [
+		"node_modules",
+		"dist",
+		"../common/src/__tests__",
+		"../common/src/__mocks__"
+	]
 }
