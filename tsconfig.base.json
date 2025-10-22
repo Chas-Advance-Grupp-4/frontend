@@ -6,7 +6,6 @@
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
-		"strict": true,
-		"types": ["node"]
+		"strict": true
 	}
 }
