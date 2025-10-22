@@ -6,12 +6,8 @@ on:
       - common-experiment
 
 jobs:
-  test-and-build:
+  test-and-build-admin:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        project: [admin-frontend, customer-frontend, driver-frontend]
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -22,22 +18,55 @@ jobs:
           node-version: "20"
           cache: "npm"
 
-      - name: Install dependencies
-        run: npm install
-
       - name: Lint
-        run: npm run lint --if-present
+        run: npm run lint
 
       - name: Test
-        run: npm test --if-present
+        run: npm test
 
       - name: Build admin app
         working-directory: ./admin-frontend
         run: npm run build
 
+  test-and-build-customer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
       - name: Build customer app
         working-directory: ./customer-frontend
         run: npm run build
+
+  test-and-build-driver:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
 
       - name: Build driver app
         working-directory: ./driver-frontend
