@@ -2,7 +2,9 @@
 	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
 		"outDir": "dist",
-		"rootDir": "src"
+		"rootDir": "src",
+		"jsx": "react-jsx",
+		"types": ["vitest", "node", "vitest/globals"]
 	},
-	"include": ["src"]
+	"include": ["src", "test", "vitest.setup.ts", "/*.spec.ts", "/*.spec.tsx"]
 }
