@@ -23,6 +23,8 @@
       "@frontend/common/*": ["../common/src/*"]
     }
   },
-  "include": ["src", "../common/src/**/*"],
+  "include": ["src"],
   "references": [{ "path": "../common" }]
 }
+
+// , "../common/src/**/*"

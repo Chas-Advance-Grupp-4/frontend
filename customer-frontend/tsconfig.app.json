@@ -21,6 +21,9 @@
 			"@/*": ["./src/*"]
 		}
 	},
-	"include": ["src", "src/env.d.ts", "../common/src/components/auth"],
+	"include": ["src", "src/env.d.ts"],
 	"exclude": ["node_modules", "dist"]
 }
+
+
+// , "../common/src/components/auth"
