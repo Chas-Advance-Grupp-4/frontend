@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { getShipmentsForCurrentUser } from "@frontend/common/src/lib/shipmentApi";
-import type { Shipment } from "@frontend/common/src/types/shipment";
-import Card from "@frontend/common/src/components/Card";
-import { useAuth } from "@frontend/common";
+import { getShipmentsForCurrentUser } from "../../../common/src/lib/shipmentApi";
+import type { Shipment } from "../../../common/src/types/shipment";
+import Card from "../../../common/src/components/Card";
+import { useAuth } from "../../../common/src/hooks/auth/AuthProvider";
 
 export default function MyParcels() {
 	const { user } = useAuth();
