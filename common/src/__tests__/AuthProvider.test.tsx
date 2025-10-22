@@ -89,7 +89,7 @@ it("restores session from storage on mount if valid token", async () => {
 	};
 
 	// Mock stored session
-	(getJSON as vi.Mock).mockReturnValue({
+	(getJSON as jest.Mock).mockReturnValue({
 		token: "stored-token",
 		user: mockUser,
 	});
