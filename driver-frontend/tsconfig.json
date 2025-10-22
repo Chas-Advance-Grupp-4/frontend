@@ -4,7 +4,7 @@
 		"outDir": "dist",
 		"rootDir": "src",
 		"jsx": "react-jsx",
-		"types": ["vitest", "node", "vitest/globals"]
+		"types": ["vitest", "node"]
 	},
 	"include": ["src", "test", "vitest.setup.ts", "/*.spec.ts", "/*.spec.tsx"]
 }
