@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import "./Button.css";
+import React from "react";
 
 type Variant = "primary" | "secondary" | "danger" | "success" | "warning";
 type Appearance = "filled" | "outline" | "ghost";
