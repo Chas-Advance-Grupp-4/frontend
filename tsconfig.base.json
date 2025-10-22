@@ -15,7 +15,6 @@
 		"composite": false,
 		"declaration": false,
 		"declarationMap": false,
-
 		"outDir": "dist",
 		"noEmit": true,
 
