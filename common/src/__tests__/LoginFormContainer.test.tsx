@@ -1,12 +1,13 @@
+import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { useAuth } from "@frontend/common";
+import { useAuth } from "../hooks/auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import LoginFormContainer from "../components/auth/LoginFormContainer";
 import "@testing-library/jest-dom";
 
 // Mock dependencies
-vi.mock("@frontend/common", () => ({
+vi.mock("../hooks/auth/AuthProvider", () => ({
 	useAuth: vi.fn(),
 	Input: (props: any) => <input {...props} />, // mock for Input component
 	Button: (props: any) => <button {...props} />, // mock for Button
@@ -48,8 +49,8 @@ describe("LoginFormContainer", () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		(useAuth as vi.Mock).mockReturnValue({ login: mockLogin });
-		(useNavigate as vi.Mock).mockReturnValue(mockNavigate);
+		(useAuth as jest.Mock).mockReturnValue({ login: mockLogin });
+		(useNavigate as jest.Mock).mockReturnValue(mockNavigate);
 	});
 
 	it("renders the LoginForm with initial state", () => {

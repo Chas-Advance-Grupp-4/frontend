@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { AuthProvider, ProtectedRoute } from "@frontend/common";
+import ProtectedRoute from "../../../common/src/hooks/auth/ProtectedRoute";
+import { AuthProvider } from "../../../common/src/hooks/auth/AuthProvider";
 import LoginPage from "../pages/LoginPage";
 import HomePage from "../pages/HomePage";
 import MyParcels from "../pages/MyParcels";

@@ -1,10 +1,11 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { AuthProvider, ProtectedRoute } from "@frontend/common";
+import { AuthProvider } from "../../../common/src/hooks/auth/AuthProvider";
+import ProtectedRoute from "../../../common/src/hooks/auth/ProtectedRoute";
 import LoginPage from "../pages/LoginPage";
 import HomePage from "../pages/HomePage";
 import DriverLayout from "../components/layout/DriverLayout";
 import ScanParcel from "../pages/ScanParcel";
-import NotificationsPage from "@/pages/NotificationsPage";
+import NotificationsPage from "../pages/NotificationsPage";
 
 const router = createBrowserRouter([
 	{ path: "/login", element: <LoginPage /> },

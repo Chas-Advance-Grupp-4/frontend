@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "@frontend/common";
-import Card from "@frontend/common/src/components/Card";
-import Button from "@frontend/common/src/components/Button";
+import { useAuth } from "../../../common/src/hooks/auth/AuthProvider";
+import Card from "../../../common/src/components/Card";
+import Button from "../../../common/src/components/Button";
 
 interface User {
 	id: string;
