@@ -1,3 +1,4 @@
+import React from "react";
 import { renderHook, act } from "@testing-library/react";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { AuthProvider, useAuth } from "../hooks/auth/AuthProvider";
@@ -88,7 +89,7 @@ it("restores session from storage on mount if valid token", async () => {
 	};
 
 	// Mock stored session
-	(getJSON as vi.Mock).mockReturnValue({
+	(getJSON as jest.Mock).mockReturnValue({
 		token: "stored-token",
 		user: mockUser,
 	});

@@ -1,6 +1,6 @@
-// UI for login form
-
-import { Input, Button } from "@frontend/common";
+import React from "react";
+import Input from "../form/Input";
+import Button from "../Button";
 
 type LoginFormProps = {
 	username: string;
