@@ -3,7 +3,11 @@ name: Simple CI
 on:
   push:
     branches:
-      - common-experiment
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
 
 jobs:
   test-frontend:
