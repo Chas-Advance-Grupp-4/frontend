@@ -1,14 +1,13 @@
-name: Azure Static Web Apps CI/CD
+name: Admin Azure SWA CI/CD
 
 on:
   push:
     branches:
-      - feat-6-1-1---cd-pipeline-for-frontend-and-staging-and-production-environment-in-azure
+      - develop
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
-      - feat-6-1-1---cd-pipeline-for-frontend-and-staging-and-production-environment-in-azure
-
+      - develop
 jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')

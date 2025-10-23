@@ -1,13 +1,13 @@
-name: Azure Static Web Apps CI/CD
+name: Driver Azure SWA CI/CD
 
 on:
   push:
     branches:
-      - feat-6-1-1---cd-pipeline-for-frontend-and-staging-and-production-environment-in-azure
+      - develop
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
-      - feat-6-1-1---cd-pipeline-for-frontend-and-staging-and-production-environment-in-azure
+      - develop
 
 jobs:
   build_and_deploy_job:
