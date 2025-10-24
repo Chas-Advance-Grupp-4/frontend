@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - develop
-      - 107-612---extend-azure-swa-deploy-workflow-to-include-prod-environment
-      - main
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:

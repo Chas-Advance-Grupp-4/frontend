@@ -3,9 +3,7 @@ name: Admin Azure SWA CI/CD
 on:
   push:
     branches:
-      - 107-612---extend-azure-swa-deploy-workflow-to-include-prod-environment
       - develop
-      - main
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
