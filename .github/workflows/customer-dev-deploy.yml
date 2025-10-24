@@ -3,6 +3,8 @@ name: Customer Azure SWA CI/CD
 on:
   push:
     branches:
+      - main
+      - develop
       - 107-612---extend-azure-swa-deploy-workflow-to-include-prod-environment
   pull_request:
     types: [opened, synchronize, reopened, closed]
