@@ -14,5 +14,5 @@ export async function login(
 }
 
 export async function me(): Promise<User> {
-	return http<User>("/api/v1/auth/me", { method: "GET" });
+	return http<User>("/api/v1/users/me", { method: "GET" });
 }
