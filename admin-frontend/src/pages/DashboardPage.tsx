@@ -1,6 +1,7 @@
 import React from "react";
 import Card from "../../../common/src/components/Card";
 import Button from "../../../common/src/components/Button";
+import QRCodeDisplay from "../components/QRCodeDisplay";
 
 const deliveries = [
 	{
@@ -49,6 +50,7 @@ const DashboardPage: React.FC = () => {
 					<Card key={d.id} title={d.customer} subtitle={d.address}>
 						<p>Status: {d.status}</p>
 						<p>ETA: {d.eta}</p>
+						<QRCodeDisplay value={`https://example.com/parcel/${d.id}`} />
 					</Card>
 				))}
 			</section>
