@@ -9,7 +9,7 @@ export default function MyParcels() {
   const [shipments, setShipments] = useState<Shipment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [tab, setTab] = useState<"expecting" | "sent">("expecting");
+  const [tab, setTab] = useState<"expecting" | "sent" | "history">("expecting");
 
   useEffect(() => {
     const fetchShipments = async () => {
@@ -37,9 +37,10 @@ export default function MyParcels() {
   if (shipments.length === 0) {
     return <p className="text-center p-4">You have no parcels to view 📭</p>;
   }
-  // Separate shipments into "expecting" and "sent"
+  // Separate shipments into "expecting", "sent" and "delivered"
   const expecting = shipments.filter((s) => s.receiver_id === user?.id);
   const sent = shipments.filter((s) => s.sender_id === user?.id);
+  const pastShipments = shipments.filter((s) => s.status === "DELIVERED" || s.status === "CANCELLED" );
 
   return (
     <div className="p-6">
@@ -62,6 +63,14 @@ export default function MyParcels() {
           onClick={() => setTab("sent")}
         >
           Sent by me
+        </button>
+        <button
+          className={`px-4 py-2 rounded-t-lg ${
+            tab === "history" ? " font-bold underline underline-offset-8" : ""
+          }`}
+          onClick={() => setTab("history")}
+        >
+          My History
         </button>
       </div>
 
@@ -94,7 +103,7 @@ export default function MyParcels() {
             </div>
           )}
         </>
-      ) : (
+      ) : tab === "sent" ?(
         <>
           {/* Sent */}
           {/* <h2 className="text-xl font-semibold mt-8 mb-2">Sent by me</h2> */}
@@ -123,6 +132,29 @@ export default function MyParcels() {
             </div>
           )}
         </>
+      ):(
+        <>
+              {/* History */} 
+              {pastShipments.length === 0 ? (
+                <p className="text-sm text-gray-500 mb-4">No history</p>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-around">
+                  {pastShipments.map((s) => (
+                    <Card
+                      key={s.id}
+                      title={s.shipment_number}
+                      subtitle={`Created: ${new Date(
+                        s.created_at  
+                      ).toLocaleDateString()}`}
+                    >
+                      <p className="text-sm text-gray-600">
+                        <strong>Status:</strong> {s.status}
+                      </p>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </>
       )}
     </div>
   );
