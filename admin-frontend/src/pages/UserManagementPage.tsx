@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../../common/src/hooks/auth/AuthProvider";
 import Card from "../../../common/src/components/Card";
 import Button from "../../../common/src/components/Button";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 interface User {
   id: string;
@@ -191,14 +192,15 @@ export default function UserManagementPage() {
       </div>
 
       {/* Filter */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 max-w-md relative">
         <input
           type="text"
           className="border rounded p-2 flex-1"
-          placeholder="Filter by username"
+          placeholder="Search by username"
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
         />
+        <MagnifyingGlassIcon className="h-6 w-6 absolute right-2" />
       </div>
 
       {/* Users list */}
