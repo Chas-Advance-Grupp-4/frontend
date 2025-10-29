@@ -1,3 +1,4 @@
+import React from "react";
 import { http } from "./http";
 import type { Shipment } from "../types/shipment";
 
@@ -6,7 +7,7 @@ import type { Shipment } from "../types/shipment";
  * Calls backend GET /api/v1/shipments/me.
  */
 export async function getShipmentsForCurrentUser(): Promise<Shipment[]> {
-	return http<Shipment[]>("/api/v1/shipments/me", { method: "GET" });
+	return http<Shipment[]>("/v1/shipments/me", { method: "GET" });
 }
 
 /**
@@ -14,5 +15,5 @@ export async function getShipmentsForCurrentUser(): Promise<Shipment[]> {
  * Calls backend GET /api/v1/shipments
  */
 export async function getAllShipments(): Promise<Shipment[]> {
-	return http<Shipment[]>("/api/v1/shipments", { method: "GET" });
+	return http<Shipment[]>("/v1/shipments", { method: "GET" });
 }

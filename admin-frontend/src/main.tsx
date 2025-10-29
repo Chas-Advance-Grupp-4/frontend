@@ -10,7 +10,7 @@ import { API_BASE_URL } from "./lib/env";
 setBaseUrlGetter(() => API_BASE_URL);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+	<React.StrictMode>
+		<App />
+	</React.StrictMode>
 );

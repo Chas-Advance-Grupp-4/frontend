@@ -1,27 +1,21 @@
-// {
-//   "files": [],
-//   "references": [
-//     { "path": "./tsconfig.app.json" },
-//     { "path": "./tsconfig.node.json" }
-//   ]
-// }
-// {
-//   "extends": "../tsconfig.base.json",
-//   "compilerOptions": {
-//     "outDir": "dist"
-//   },
-//   "include": ["src"]
-// }
 {
-  "compilerOptions": {
-    "moduleResolution": "bundler", // or "node16"/"nodenext"
-    "module": "esnext",
-    "target": "esnext",
-    "jsx": "react-jsx",
-    "baseUrl": ".",
-    "paths": {
-      "@frontend/common/*": ["../common/src/*"]
-    },
-    "types": ["jest", "@testing-library/jest-dom"]
-  }
+	"extends": "../tsconfig.base.json",
+	"compilerOptions": {
+		"outDir": "dist",
+		"rootDir": "../",
+		"jsx": "react-jsx"
+	},
+	"include": [
+		"src",
+		"../common/src/components",
+		"../common/src/hooks",
+		"../common/src/lib",
+		"../common/src/types"
+	],
+	"exclude": [
+		"node_modules",
+		"dist",
+		"../common/src/__tests__",
+		"../common/src/__mocks__"
+	]
 }

@@ -1,4 +1,6 @@
 import BottomNav from "../components/layout/BottomNav";
+// import { Button, Card } from "@frontend/common";
+// import PickUp from "./Deliveries";
 import Deliveries from "./Deliveries";
 
 // const deliveries = [
@@ -40,13 +42,15 @@ import Deliveries from "./Deliveries";
 // ];
 
 const HomePage: React.FC = () => {
-  return (
-    <div className="bg-bg-default">
-        <h1 className="text-2xl text-text-primary font-bold mb-6 text-center">Deliveries 📦</h1>
-        <Deliveries />
-      <BottomNav />
-    </div>
-  );
+	return (
+		<div className="bg-bg-default">
+			<h1 className="text-2xl text-text-primary font-bold mb-6 text-center">
+				Deliveries 📦
+			</h1>
+			<Deliveries />
+			<BottomNav />
+		</div>
+	);
 };
 
 export default HomePage;

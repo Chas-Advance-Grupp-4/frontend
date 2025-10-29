@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useAuth, ToggleTheme } from "@frontend/common/src";
+import { useAuth } from "../../../../common/src/hooks/auth/AuthProvider";
+import ToggleTheme from "../../../../common/src/components/ToggleTheme";
 import { Cog8ToothIcon } from "@heroicons/react/24/outline";
 
 function NavItem({ to, children }: { to: string; children: React.ReactNode }) {
@@ -47,7 +48,7 @@ export default function OptionsNav() {
 				{/* Right: user menu */}
 				<div className="hidden items-center gap-3 md:flex">
 					<span className="text-sm text-text-secondary">
-						{user?.username ?? "Signed in"}
+						{user?.email ?? "Signed in"}
 					</span>
 					<button
 						onClick={() => {

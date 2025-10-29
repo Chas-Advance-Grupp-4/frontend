@@ -1,5 +1,6 @@
 import React from "react";
-import { Card, Button } from "@frontend/common";
+import Card from "../../../common/src/components/Card";
+import Button from "../../../common/src/components/Button";
 
 const deliveries = [
 	{

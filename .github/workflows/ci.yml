@@ -3,7 +3,8 @@ name: CI
 on:
   push:
     branches:
-      - 85-7111-set-up-ci-workflow-for-frontend
+      - develop
+      - common-experiment
   pull_request:
 
 jobs:
@@ -20,25 +21,21 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: "22"
+          cache: "npm"
 
       - name: Install dependencies
+        working-directory: ${{ matrix.project }}
         run: npm install
-
-      - name: Build common workspace 
-        run: npm run build --workspace common
 
       - name: Lint
         working-directory: ${{ matrix.project }}
-        run: npm run lint
+        run: npm run lint --if-present
 
       - name: Test
         working-directory: ${{ matrix.project }}
         run: npm test --if-present
 
       - name: Build
-        run: npm run build --workspace  ${{ matrix.project }}
-
-
-        # another test
+        working-directory: ${{ matrix.project }}
+        run: npm run build
