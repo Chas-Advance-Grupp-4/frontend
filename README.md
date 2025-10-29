@@ -54,37 +54,36 @@ Each app has its own .env file:
 - Keep app-specific logic inside each app folder.
 - Commit messages follow Conventional Commits.
 
-# Deployment
+## Unified Azure SWA Workflow
 
-## Azure Static Web App for preview and staging
+This workflow (.github/workflows/deployment.yml) manages all frontend applications — admin, customer, and driver — within a single YAML file, replacing six separate pipelines for development and production.
 
-Every time you create a Pull Request (PR) from a feature branch (for example, feature/ui-change) into the 'develop' branch,
-GitHub Actions automatically triggers the Azure Static Web Apps pipeline. There is one for each app; Customer, Admin and Driver.
+### Automated Flow
 
-That workflow builds our frontend apps and deploys them to a temporary environment — called a Preview Deployment. When the PR is closed or merged, the preview environment is automatically deleted by your second job (close_pull_request_job) and the main staging environment is built instead.
+- Pull Requests → Automatically creates Preview Environments for both develop (staging) and main (production)
+- Push to develop → Deploys to the permanent staging environments on Azure
+- Push to main → Deploys to the permanent production environments on Azure
+- PR closed or merged → Automatically removes the temporary preview environments
 
-This makes it easy for others (like reviewers) to open a PR, click the temporary URL, and instantly see what your change looks like — without needing to pull your code locally.
+### Optimization
 
-Preview Deployment = for internal review during a PR
+- Uses a matrix strategy to deploy all three apps in parallel (admin, customer, driver)
+- Combines staging, production, and preview logic in a single unified pipeline
+- Automatically switches between the correct deployment tokens and environment variables depending on the branch
+- Eliminates duplicated YAML code, ensuring consistency and easier maintenance across all frontends
 
-- Purpose: Temporary test version for each PR
-- Trigger: PR opened/updated
-- URL: Unique per branch
+### Result
 
-Staging = for external review and testing after merge
+A clean, scalable, and fully automated CI/CD pipeline that provides fast, reliable, and unified deployments for all frontend applications.
 
-- Purpose: Stable version of latest dev code
-- Trigger: Merge to develop
-- URL: One permanent URL for each app
-
-The latest code from develop is built and deployed to the main staging URLs:
+### Permanent staging URLs:
 
 - Admin app: https://gray-desert-0157fa003.3.azurestaticapps.net
 - Driver app: https://gentle-stone-0caf78303.3.azurestaticapps.net
 - Customer app: https://ambitious-sea-0fd974703.3.azurestaticapps.net
 
-These sites always reflects the current, stable development version of our project.
+### Permanent production URLs:
 
-## Vercel for prod
-
-Our code in the main branch is built and deployed automatically to Vercel with Github Actions. That is how our frontend stays updated with tha latest code.
+- Admin app: https://gray-flower-0469d3603.3.azurestaticapps.net
+- Driver app: https://happy-forest-03e248603.3.azurestaticapps.net
+- Customer app: https://jolly-moss-0f56b0603.3.azurestaticapps.net
