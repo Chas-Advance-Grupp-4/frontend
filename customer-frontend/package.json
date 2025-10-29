@@ -9,6 +9,9 @@
 		"lint": "eslint .",
 		"preview": "vite preview"
 	},
+	"engines": {
+		"node": "22"
+	},
 	"dependencies": {
 		"@heroicons/react": "^2.2.0",
 		"@tailwindcss/vite": "^4.1.13",
