@@ -2,7 +2,7 @@
 
 This repository contains all frontend applications for the Chas Advance project.
 
-We use **npm workspaces** to manage multiple apps and a shared package (`common/`).
+We use **npm workspaces** to manage multiple apps. It also contains a shared directory with shared code, (`common/`).
 
 ## Structure
 
@@ -17,7 +17,7 @@ frontend/
 
 ## Prerequisites
 
-- Node.js 18+ (20 recommended)
+- Node.js 22
 - npm 9+
 
 ## Getting Started
@@ -39,11 +39,12 @@ frontend/
 
 ## Environment Variables
 
-Each app has its own .env.local file:
+Each app has its own .env file:
 
 - customer-frontend/.env.local
 - admin-frontend/.env.local
 - driver-frontend/.env.local
+
   Common example:
   VITE_API_BASE_URL=http://localhost:8000
 
@@ -52,3 +53,38 @@ Each app has its own .env.local file:
 - Use common/ for shared code (UI, hooks, utils).
 - Keep app-specific logic inside each app folder.
 - Commit messages follow Conventional Commits.
+
+# Deployment
+
+## Azure Static Web App for preview and staging
+
+Every time you create a Pull Request (PR) from a feature branch (for example, feature/ui-change) into the 'develop' branch,
+GitHub Actions automatically triggers the Azure Static Web Apps pipeline. There is one for each app; Customer, Admin and Driver.
+
+That workflow builds our frontend apps and deploys them to a temporary environment — called a Preview Deployment. When the PR is closed or merged, the preview environment is automatically deleted by your second job (close_pull_request_job) and the main staging environment is built instead.
+
+This makes it easy for others (like reviewers) to open a PR, click the temporary URL, and instantly see what your change looks like — without needing to pull your code locally.
+
+Preview Deployment = for internal review during a PR
+
+- Purpose: Temporary test version for each PR
+- Trigger: PR opened/updated
+- URL: Unique per branch
+
+Staging = for external review and testing after merge
+
+- Purpose: Stable version of latest dev code
+- Trigger: Merge to develop
+- URL: One permanent URL for each app
+
+The latest code from develop is built and deployed to the main staging URLs:
+
+- Admin app: https://gray-desert-0157fa003.3.azurestaticapps.net
+- Driver app: https://gentle-stone-0caf78303.3.azurestaticapps.net
+- Customer app: https://ambitious-sea-0fd974703.3.azurestaticapps.net
+
+These sites always reflects the current, stable development version of our project.
+
+## Vercel for prod
+
+Our code in the main branch is built and deployed automatically to Vercel with Github Actions. That is how our frontend stays updated with tha latest code.
