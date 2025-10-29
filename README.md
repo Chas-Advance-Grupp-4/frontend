@@ -85,6 +85,12 @@ The latest code from develop is built and deployed to the main staging URLs:
 
 These sites always reflects the current, stable development version of our project.
 
-## Vercel for prod
+## Azure Static Web App for production
 
-Our code in the main branch is built and deployed automatically to Vercel with Github Actions. That is how our frontend stays updated with tha latest code.
+The latest code from main is built and deployed to the main production URLs:
+
+- Admin app: https://gray-flower-0469d3603.3.azurestaticapps.net
+- Driver app: https://happy-forest-03e248603.3.azurestaticapps.net
+- Customer app: https://jolly-moss-0f56b0603.3.azurestaticapps.net
+
+It follows the same pattern, with a temp preview built on PR and a permanent on merge to main.
