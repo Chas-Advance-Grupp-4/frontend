@@ -49,7 +49,7 @@ jobs:
                   repo_token: ${{ secrets.GITHUB_TOKEN }}
                   action: "upload"
                   ###### Repository/Build Configurations ######
-                  app_location: ./frontend/${{ matrix.app }}-frontend
+                  app_location: ./${{ matrix.app }}-frontend
                   api_location: ""
                   output_location: dist
                   ###### End ######
