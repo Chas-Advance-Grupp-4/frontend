@@ -6,6 +6,7 @@ export interface QRCodeProps {
 
 export interface QRScannerProps {
   onScan: (value: string) => void;
+  isActive?: boolean;
 }
 
 export const QRContainer: FC<{ title?: string; children: ReactNode }> = ({ title, children }) => (
