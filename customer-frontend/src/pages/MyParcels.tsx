@@ -10,7 +10,7 @@ export default function MyParcels() {
   const [shipments, setShipments] = useState<Shipment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [tab, setTab] = useState<"expecting" | "sent">("expecting");
+  const [tab, setTab] = useState<"expecting" | "sent" | "history">("expecting");
 
   useEffect(() => {
     const fetchShipments = async () => {
@@ -219,6 +219,14 @@ const getStatusBadge = (status: ShipmentStatus) => {
         >
           Sent by Me ({sent.length})
         </button>
+        <button
+          className={`px-4 py-2 rounded-t-lg ${
+            tab === "history" ? " font-bold underline underline-offset-8" : ""
+          }`}
+          onClick={() => setTab("history")}
+        >
+          My History
+        </button>
       </div>
 
       {tab === "expecting" ? (
@@ -226,126 +234,36 @@ const getStatusBadge = (status: ShipmentStatus) => {
           <h2 className="text-xl font-semibold mb-4 text-gray-800">📥 Expecting ({expecting.length})</h2>
           {renderShipments(expecting, "Expecting")}
         </>
-      ) : (
+      ) : tab === "sent" ?(
         <>
           <h2 className="text-xl font-semibold mb-4 text-gray-800">📤 Sent by Me ({sent.length})</h2>
           {renderShipments(sent, "Sent")}
         </>
+      ):(
+        <>
+              {/* History */} 
+              {pastShipments.length === 0 ? (
+                <p className="text-sm text-gray-500 mb-4">No history</p>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-around">
+                  {pastShipments.map((s) => (
+                    <Card
+                      key={s.id}
+                      title={s.shipment_number}
+                      subtitle={`Created: ${new Date(
+                        s.created_at  
+                      ).toLocaleDateString()}`}
+                    >
+                      <p className="text-sm text-gray-600">
+                        <strong>Status:</strong> {s.status}
+                      </p>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </>
       )}
     </div>
-    // <div className="p-6">
-    //   <h1 className="text-2xl font-bold mb-6 text-center">My Parcels 📦</h1>
-
-    //   {/* tabs section */}
-    //   <div className="flex justify-center mb-6">
-    //     <button
-    //       className={`px-4 py-2 rounded-t-lg ${
-    //         tab === "expecting" ? " font-bold underline underline-offset-8" : ""
-    //       }`}
-    //       onClick={() => setTab("expecting")}
-    //     >
-    //       Expecting
-    //     </button>
-    //     <button
-    //       className={`px-4 py-2 rounded-t-lg ${
-    //         tab === "sent" ? " font-bold underline underline-offset-8" : ""
-    //       }`}
-    //       onClick={() => setTab("sent")}
-    //     >
-    //       Sent by me
-    //     </button>
-    //   </div>
-
-    //   {tab === "expecting" ? (
-    //     <>
-    //       {/* Expecting */}
-    //       {/* <h2 className="text-xl font-semibold mt-6 mb-2">Expecting</h2> */}
-    //       {expecting.length === 0 ? (
-    //         <p className="text-sm text-gray-500 mb-4">No incoming parcels</p>
-    //       ) : (
-    //         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-around">
-    //           {expecting.map((s) => (
-    //             <Card
-    //               key={s.id}
-    //               title={s.shipment_number}
-    //               subtitle={`Created: ${new Date(
-    //                 s.created_at
-    //               ).toLocaleDateString()}`}
-    //             >
-    //               <p className="text-sm text-gray-600">
-    //                 <strong>From:</strong> {s.sender_id.slice(0, 8)}…
-    //               </p>
-    //               {s.driver_id && (
-    //                 <p className="text-sm text-gray-600">
-    //                   <strong>Driver:</strong> {s.driver_id.slice(0, 8)}…
-    //                 </p>
-    //               )}
-    //                <p className="text-sm text-gray-600 mt-2">
-    //                 Status: <span className={`px-2 py-1 rounded-full text-xs ${
-    //                   s.status === 'CREATED' ? 'bg-green-100 text-green-800' :
-    //                   s.status === 'ASSIGNED' ? 'bg-green-100 text-green-800' :
-    //                   s.status === 'IN_TRANSIT' ? 'bg-yellow-100 text-yellow-800' :
-    //                   'bg-gray-100 text-gray-800'
-    //                 }`}>
-    //                   {s.status}
-    //                 </span>
-    //               </p>
-    //             </Card>
-    //           ))}
-    //         </div>
-    //       )}
-    //     </>
-    //   ) : (
-    //     <>
-    //       {/* Sent */}
-    //       {/* <h2 className="text-xl font-semibold mt-8 mb-2">Sent by me</h2> */}
-    //       {sent.length === 0 ? (
-    //         <p className="text-sm text-gray-500 mb-4">No sent parcels</p>
-    //       ) : (
-    //         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-around">
-    //           {sent.map((s) => (
-    //             <Card
-    //               key={s.id}
-    //               title={s.shipment_number}
-    //               subtitle={`Created: ${new Date(
-    //                 s.created_at
-    //               ).toLocaleDateString()}`}
-    //             >
-    //               <p className="text-sm text-gray-600">
-    //                 <strong>To:</strong> {s.receiver_id.slice(0, 8)}…
-    //               </p>
-    //               {s.driver_id && (
-    //                 <p className="text-sm text-gray-600">
-    //                   <strong>Driver:</strong> {s.driver_id.slice(0, 8)}…
-    //                 </p>
-    //               )}
-    //                 <p className="text-sm text-gray-600 mt-2">
-    //                 Status: <span className={`px-2 py-1 rounded-full text-xs ${
-    //                   s.status === 'DELIVERED' ? 'bg-green-100 text-green-800' :
-    //                   s.status === 'CANCELLED' ? 'bg-yellow-100 text-yellow-800' :
-    //                   'bg-gray-100 text-gray-800'
-    //                 }`}>
-    //                   {s.status}
-    //                 </span>
-    //               </p>
-                  
-    //               {/* QR Code Display for sent parcels */}
-    //               <div className="mt-4 pt-2 border-t border-gray-200">
-    //                 <QRCodeDisplay 
-    //                   value={s.qr_code_value!} 
-    //                   shipment_number={s.shipment_number}
-    //                   onPrint={() => {
-    //                     // You can add any custom print logic here
-    //                     window.print();
-    //                   }}
-    //                 />
-    //               </div>
-    //             </Card>
-    //           ))}
-    //         </div>
-    //       )}
-    //     </>
-    //   )}
-    // </div>
+   
   );
 }
