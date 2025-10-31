@@ -57,7 +57,7 @@ export default function ScanParcel() {
       const apiBase = import.meta.env.VITE_API_URL || "http://localhost:8000";
       const token = localStorage.getItem("access_token");
 
-      const response = await fetch(`${apiBase}/shipments/${shipmentId}`, {
+      const response = await fetch(`${apiBase}/v1/shipments/${shipmentId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
