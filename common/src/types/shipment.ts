@@ -14,4 +14,5 @@ export interface Shipment {
 	created_at: string;
 	sensor_unit_id?: string | null;
 	status: ShipmentStatus;
+	qr_code_value?: string;
 }

@@ -2,6 +2,8 @@ import { ReactNode, FC } from "react";
 
 export interface QRCodeProps {
   value: string;
+  shipment_number?: string;
+  onPrint?: () => void;
 }
 
 export interface QRScannerProps {
