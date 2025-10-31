@@ -10,7 +10,7 @@ export default function MyParcels() {
   const [shipments, setShipments] = useState<Shipment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [tab, setTab] = useState<"expecting" | "sent">("expecting");
+  const [tab, setTab] = useState<"expecting" | "sent" | "history">("expecting");
 
   useEffect(() => {
     const fetchShipments = async () => {
@@ -219,6 +219,14 @@ const getStatusBadge = (status: ShipmentStatus) => {
         >
           Sent by Me ({sent.length})
         </button>
+        <button
+          className={`px-4 py-2 rounded-t-lg ${
+            tab === "history" ? " font-bold underline underline-offset-8" : ""
+          }`}
+          onClick={() => setTab("history")}
+        >
+          My History
+        </button>
       </div>
 
       {tab === "expecting" ? (
@@ -226,11 +234,34 @@ const getStatusBadge = (status: ShipmentStatus) => {
           <h2 className="text-xl font-semibold mb-4 text-gray-800">📥 Expecting ({expecting.length})</h2>
           {renderShipments(expecting, "Expecting")}
         </>
-      ) : (
+      ) : tab === "sent" ?(
         <>
           <h2 className="text-xl font-semibold mb-4 text-gray-800">📤 Sent by Me ({sent.length})</h2>
           {renderShipments(sent, "Sent")}
         </>
+      ):(
+        <>
+              {/* History */} 
+              {pastShipments.length === 0 ? (
+                <p className="text-sm text-gray-500 mb-4">No history</p>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-around">
+                  {pastShipments.map((s) => (
+                    <Card
+                      key={s.id}
+                      title={s.shipment_number}
+                      subtitle={`Created: ${new Date(
+                        s.created_at  
+                      ).toLocaleDateString()}`}
+                    >
+                      <p className="text-sm text-gray-600">
+                        <strong>Status:</strong> {s.status}
+                      </p>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </>
       )}
     </div>
    
