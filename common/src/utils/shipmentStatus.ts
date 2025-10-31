@@ -3,7 +3,7 @@ import type { ShipmentStatus } from "../types/shipment";
 export function formatShipmentStatus(status: ShipmentStatus): string {
 	switch (status) {
 		case "created":
-			return "Preparing shipment";
+			return "Preparing for pickup";
 		case "assigned":
 			return "Driver assigned";
 		case "in_transit":
