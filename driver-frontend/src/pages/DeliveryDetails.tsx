@@ -7,7 +7,7 @@ import {
 import type { Shipment } from "../../../common/src/types/shipment";
 import { getShipmentStatusLabel } from "../../../common/src/utils/shipmentStatus";
 
-export default function DriverShipmentPage() {
+export default function DeliveryDetails() {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const [shipment, setShipment] = useState<Shipment | null>(null);
