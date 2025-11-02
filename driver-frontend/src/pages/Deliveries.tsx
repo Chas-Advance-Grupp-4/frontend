@@ -1,9 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { getMyShipments } from "../../../common/src/lib/shipmentApi";
-import type {
-	Shipment,
-	ShipmentStatus,
-} from "../../../common/src/types/shipment";
+import type { Shipment } from "../../../common/src/types/shipment";
 import Card from "../../../common/src/components/Card";
 import { useAuth } from "../../../common/src/hooks/auth/AuthProvider";
 import QRCodeDisplay from "../components/QRCodeDisplay";
@@ -15,10 +12,13 @@ export default function Deliveries() {
 	const [shipments, setShipments] = useState<Shipment[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const [tab, setTab] = useState<
+		"pick-up" | "on-board" | "delivered" | "cancelled"
+	>("pick-up");
 
+	// Fetch shipments
 	useEffect(() => {
 		if (!user) return;
-
 		const fetchShipments = async () => {
 			try {
 				const data = await getMyShipments();
@@ -34,7 +34,6 @@ export default function Deliveries() {
 				setLoading(false);
 			}
 		};
-
 		fetchShipments();
 	}, [user]);
 
@@ -43,6 +42,7 @@ export default function Deliveries() {
 		[shipments, user?.id]
 	);
 
+	// bucket shipments for driver workflow
 	const toPickUp = assignedToMe.filter(
 		(s) => s.status === "created" || s.status === "assigned"
 	);
@@ -55,42 +55,42 @@ export default function Deliveries() {
 	if (assignedToMe.length === 0)
 		return <p className="text-center p-4">No assigned deliveries 🚚</p>;
 
-	const renderCard = (s: Shipment, showPickup: boolean) => (
-		<Link to={`/deliveries/${s.id}`}>
+	/** Renders card like customer UI but driver-context-aware */
+	const renderShipmentCard = (s: Shipment, showPickup: boolean) => (
+		<Link key={s.id} to={`/deliveries/${s.id}`}>
 			<Card
-				key={s.id}
 				title={s.shipment_number}
 				subtitle={`Ordered: ${new Date(s.created_at).toLocaleDateString()}`}
 			>
 				{showPickup && (
-					<p className="text-sm text-gray-400 mb-1">
+					<p className="text-sm text-gray-600 mb-1">
 						<span className="font-medium">Pickup:</span> {s.pickup_address}
 					</p>
 				)}
 
-				<p className="text-sm text-gray-400 mb-1">
+				<p className="text-sm text-gray-600 mb-1">
 					<span className="font-medium">Deliver to:</span> {s.delivery_address}
 				</p>
 
-				<p className="text-sm text-gray-400 mb-1 flex items-center gap-2">
-					<span className="font-medium">Status:</span>
+				<p className="text-sm text-gray-600 mb-1 flex items-center gap-2">
+					<span className="font-medium">Status:</span>{" "}
 					<ShipmentStatusBadge status={s.status} />
 				</p>
 
 				{s.min_temp !== null && s.max_temp !== null && (
-					<p className="text-sm text-gray-400 mt-1">
-						<span className="font-medium">Temp:</span> {s.min_temp}°C –{" "}
+					<p className="text-sm text-gray-600 mt-1">
+						<span className="font-medium">Temp range:</span> {s.min_temp}°C –{" "}
 						{s.max_temp}°C
 					</p>
 				)}
 
-				{/* QR Code for pickup/in-transit only */}
+				{/* driver can always scan QR unless already delivered */}
 				{s.status !== "delivered" && (
 					<div className="mt-4 pt-2 border-t border-gray-200">
 						<QRCodeDisplay
 							value={s.qr_code_value}
 							shipment_number={s.shipment_number}
-							onPrint={() => window.print()}
+							onPrint={() => console.log(`Print QR for ${s.shipment_number}`)}
 						/>
 					</div>
 				)}
@@ -98,53 +98,48 @@ export default function Deliveries() {
 		</Link>
 	);
 
+	// Tab mapping
+	const tabs = {
+		"pick-up": toPickUp,
+		"on-board": inTransit,
+		delivered: delivered,
+		cancelled: cancelled,
+	};
+
 	return (
 		<div className="p-6">
-			<h1 className="text-2xl font-bold mb-6 text-center">Deliveries 🚛</h1>
+			<h1 className="text-2xl font-bold mb-6 text-center">
+				Driver Deliveries 🚛
+			</h1>
 
-			{/* Pick-up */}
-			<h2 className="text-xl font-semibold mt-6 mb-2">Pick-up</h2>
-			{toPickUp.length === 0 ? (
-				<p className="text-sm text-gray-400 mb-4">No parcels to pick up</p>
-			) : (
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-					{toPickUp.map((s) => renderCard(s, true))}
-				</div>
-			)}
+			{/* Tabs */}
+			<div className="flex justify-center mb-6 space-x-4">
+				{(Object.keys(tabs) as Array<keyof typeof tabs>).map((t) => (
+					<button
+						key={t}
+						className={`px-4 py-2 rounded-t-lg ${
+							tab === t
+								? "font-bold underline underline-offset-8"
+								: "text-gray-600"
+						}`}
+						onClick={() => setTab(t)}
+					>
+						{t === "pick-up" && `Pick-up (${toPickUp.length})`}
+						{t === "on-board" && `On Board (${inTransit.length})`}
+						{t === "delivered" && `Delivered (${delivered.length})`}
+						{t === "cancelled" && `Cancelled (${cancelled.length})`}
+					</button>
+				))}
+			</div>
 
-			{/* In Transit */}
-			<h2 className="text-xl font-semibold mt-8 mb-2">On Board</h2>
-			{inTransit.length === 0 ? (
-				<p className="text-sm text-gray-400 mb-4">
-					No parcels currently in transit
-				</p>
-			) : (
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-					{inTransit.map((s) => renderCard(s, false))}
-				</div>
-			)}
-
-			{/* Delivered */}
-			<h2 className="text-xl font-semibold mt-8 mb-2">Delivered</h2>
-			{delivered.length === 0 ? (
-				<p className="text-sm text-gray-400 mb-4">No delivered parcels yet</p>
-			) : (
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-					{delivered.map((s) => renderCard(s, false))}
-				</div>
-			)}
-
-			{/* Cancelled */}
-			{cancelled.length > 0 && (
-				<>
-					<h2 className="text-xl font-semibold mt-8 mb-2 text-red-600">
-						Cancelled
-					</h2>
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-						{cancelled.map((s) => renderCard(s, false))}
-					</div>
-				</>
-			)}
+			{/* Results grid */}
+			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-around">
+				{tabs[tab].length === 0 ? (
+					<p className="text-sm text-gray-500">No shipments here</p>
+				) : (
+					tabs[tab].map((s) => renderShipmentCard(s, tab === "pick-up"))
+				)}
+			</div>
 		</div>
 	);
 }
