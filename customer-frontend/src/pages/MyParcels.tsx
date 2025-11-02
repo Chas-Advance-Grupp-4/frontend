@@ -1,10 +1,8 @@
 import { useEffect, useState, useMemo } from "react";
 import { getMyShipments } from "../../../common/src/lib/shipmentApi";
-import type {
-	Shipment,
-	ShipmentStatus,
-} from "../../../common/src/types/shipment";
+import type { Shipment } from "../../../common/src/types/shipment";
 import Card from "../../../common/src/components/Card";
+import QRCodeDisplay from "../components/QRCodeDisplay";
 import { useAuth } from "../../../common/src/hooks/auth/AuthProvider";
 import { getShipmentStatusLabel } from "../../../common/src/utils/shipmentStatus";
 
@@ -13,11 +11,32 @@ export default function MyParcels() {
 	const [shipments, setShipments] = useState<Shipment[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
-	const [tab, setTab] = useState<"expecting" | "sending" | "history">(
-		"expecting"
-	);
+	const [tab, setTab] = useState<"expecting" | "sending" | "history">("expecting");
 
-	// filter shipments by perspective
+	// Fetch shipments + attach QR value
+	useEffect(() => {
+		const fetchShipments = async () => {
+			try {
+				const data = await getMyShipments();
+
+				const shipmentsWithQR = data.map((shipment: Shipment) => ({
+					...shipment,
+					qr_code_value: `parcel:${shipment.id}`,
+				}));
+
+				setShipments(shipmentsWithQR);
+			} catch (err) {
+				console.error(err);
+				setError("Failed to load shipments");
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		fetchShipments();
+	}, []);
+
+	// Derived lists (customer)
 	const expecting = useMemo(
 		() => shipments.filter((s) => s.receiver_id === user?.id),
 		[shipments, user?.id]
@@ -38,28 +57,12 @@ export default function MyParcels() {
 		[shipments, user?.id]
 	);
 
-	useEffect(() => {
-		const fetchShipments = async () => {
-			try {
-				const data = await getMyShipments();
-				setShipments(data);
-			} catch (err) {
-				console.error(err);
-				setError("Failed to load shipments");
-			} finally {
-				setLoading(false);
-			}
-		};
-		fetchShipments();
-	}, []);
-
 	if (loading) return <p className="text-center p-4">Loading parcels…</p>;
 	if (error) return <p className="text-center text-red-500">{error}</p>;
 	if (shipments.length === 0)
-		return (
-			<p className="text-center p-4">You don't have any parcels to view 📭</p>
-		);
+		return <p className="text-center p-4">You don't have any parcels to view 📭</p>;
 
+	// Standard card UI for customer
 	const renderShipmentCard = (
 		s: Shipment,
 		type: "expecting" | "sending" | "history"
@@ -96,6 +99,22 @@ export default function MyParcels() {
 					{s.max_temp}°C
 				</p>
 			)}
+
+			{/* QR Code for sender OR driver (not delivered) */}
+			{s.status !== "delivered" &&
+				(s.sender_id === user?.id || user?.role === "driver") && (
+					<div className="mt-4 pt-2 border-t border-gray-200">
+						<QRCodeDisplay
+							value={s.qr_code_value}
+							shipment_number={s.shipment_number}
+							onPrint={() =>
+								console.log(
+									`🖨️ Printing QR for ${s.shipment_number} (${s.id})`
+								)
+							}
+						/>
+					</div>
+				)}
 		</Card>
 	);
 
@@ -113,9 +132,9 @@ export default function MyParcels() {
 						}`}
 						onClick={() => setTab(val)}
 					>
-						{val === "expecting" && "Expecting"}
-						{val === "sending" && "Sending"}
-						{val === "history" && "History"}
+						{val === "expecting" && `Expecting (${expecting.length})`}
+						{val === "sending" && `Sending (${sending.length})`}
+						{val === "history" && `History (${history.length})`}
 					</button>
 				))}
 			</div>
