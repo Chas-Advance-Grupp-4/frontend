@@ -66,6 +66,17 @@ export async function updateShipment(
 }
 
 /**
+ * Update only shipment status (driver/customer/admin)
+ * PATCH /api/v1/shipments/{shipmentId}
+ */
+export async function updateShipmentStatus(
+	shipmentId: string,
+	status: Shipment["status"]
+): Promise<Shipment> {
+	return updateShipment(shipmentId, { status });
+}
+
+/**
  * Update ALL fields on shipment (admin only)
  * PATCH /api/v1/shipments/update-all/{shipmentId}
  */
