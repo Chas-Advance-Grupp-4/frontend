@@ -50,7 +50,7 @@ const DashboardPage: React.FC = () => {
 					<Card key={d.id} title={d.customer} subtitle={d.address}>
 						<p>Status: {d.status}</p>
 						<p>ETA: {d.eta}</p>
-						<QRCodeDisplay value={`https://example.com/parcel/${d.id}`} />
+						<QRCodeDisplay value={`https://grupp4awa.azurewebsites.net/api/parcel/${d.id}`} />
 					</Card>
 				))}
 			</section>
