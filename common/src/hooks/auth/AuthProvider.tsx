@@ -8,7 +8,7 @@ import React, {
 import type { User, Role, LoginResponse } from "../../types/auth";
 import { login as apiLogin, me as apiMe } from "../../lib/authApi";
 import { getJSON, setJSON, remove } from "../../lib/storage";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
 type AuthContextValue = {
 	token: string | null;
