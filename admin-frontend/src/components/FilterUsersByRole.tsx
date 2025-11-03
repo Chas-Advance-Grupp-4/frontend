@@ -2,8 +2,7 @@ import { Role } from "common/src/types/auth";
 import React from "react";
 interface Props {
   value: Role | "no filter",
-  onChange: 
-  React.ChangeEventHandler<HTMLSelectElement> | undefined
+  onChange: React.ChangeEventHandler<HTMLSelectElement> | undefined
 }
 
 const FilterUsersByRole = ({ value, onChange }: Props) => {
