@@ -88,7 +88,7 @@ export default function Deliveries() {
 				{s.status !== "delivered" && (
 					<div className="mt-4 pt-2 border-t border-gray-200">
 						<QRCodeDisplay
-							value={s.qr_code_value}
+							value={s.qr_code_value || ""}
 							shipment_number={s.shipment_number}
 							onPrint={() => console.log(`Print QR for ${s.shipment_number}`)}
 						/>
