@@ -17,20 +17,31 @@ export default function DriverScanPickup() {
 	const [scannerActive, setScannerActive] = useState(true);
 	const [shipmentInfo, setShipmentInfo] = useState<Shipment | null>(null);
 
-	const extractUUID = (value: string): string | null => {
-		if (value.startsWith("parcel:")) return value.replace("parcel:", "").trim();
-		const m = value.match(/[0-9a-fA-F-]{36}/);
-		return m ? m[0] : null;
+	// ✅ Extract UUID same way as customer
+	const extractShipmentId = (value: string): string | null => {
+		const trimmed = value.trim();
+		if (trimmed.startsWith("parcel:"))
+			return trimmed.replace("parcel:", "").trim();
+
+		const match = trimmed.match(
+			/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/
+		);
+
+		return match ? match[0] : null;
 	};
 
 	const handleScan = async (value: string) => {
-		const shipmentId = extractUUID(value);
+		setScannerActive(false);
+		setMessage(null);
+
+		const shipmentId = extractShipmentId(value);
 		if (!shipmentId) {
-			setMessage("❌ Invalid QR — no shipment ID found.");
+			setMessage("❌ Invalid QR code — no shipment ID found.");
+			setScannerActive(true);
 			return;
 		}
 
-		setScannerActive(false);
+		setMessage(`✅ QR recognized\nID: ${shipmentId}`);
 		await fetchShipment(shipmentId);
 	};
 
@@ -72,7 +83,7 @@ export default function DriverScanPickup() {
 			return;
 		}
 
-		setMessage("✅ Parcel verified. Press Confirm Pickup.");
+		setMessage("✅ Parcel verified.\nPress Confirm Pickup to proceed.");
 	};
 
 	const confirmPickup = async () => {
@@ -82,7 +93,8 @@ export default function DriverScanPickup() {
 			setLoading(true);
 			setMessage("📦 Updating shipment to IN TRANSIT...");
 
-			await updateShipmentStatus(shipmentInfo.id, "in_transit");
+			const updated = await updateShipmentStatus(shipmentInfo.id, "in_transit");
+			setShipmentInfo(updated);
 
 			setMessage("🚚 Parcel now IN TRANSIT ✅");
 
@@ -98,6 +110,7 @@ export default function DriverScanPickup() {
 		setScannerActive(true);
 		setShipmentInfo(null);
 		setMessage(null);
+		setLoading(false);
 	};
 
 	return (
@@ -125,7 +138,7 @@ export default function DriverScanPickup() {
 					</div>
 				)}
 
-				{shipmentInfo && message?.startsWith("✅") && (
+				{shipmentInfo && message?.includes("Confirm Pickup") && (
 					<button
 						className="w-full py-2 bg-green-600 text-white rounded"
 						onClick={confirmPickup}
@@ -148,7 +161,7 @@ export default function DriverScanPickup() {
 					onClick={() => navigate("/")}
 					className="w-full py-2 bg-gray-200 rounded"
 				>
-					← Back
+					← Back to Deliveries
 				</button>
 			</div>
 		</div>

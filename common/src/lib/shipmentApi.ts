@@ -67,13 +67,15 @@ export async function updateShipment(
 
 /**
  * Update only shipment status (driver/customer/admin)
- * PATCH /api/v1/shipments/{shipmentId}
+ * PATCH /api/v1/shipments/{shipmentId}?status=...
  */
 export async function updateShipmentStatus(
 	shipmentId: string,
 	status: Shipment["status"]
 ): Promise<Shipment> {
-	return updateShipment(shipmentId, { status });
+	return http<Shipment>(`/v1/shipments/${shipmentId}?status=${status}`, {
+		method: "PATCH",
+	});
 }
 
 /**

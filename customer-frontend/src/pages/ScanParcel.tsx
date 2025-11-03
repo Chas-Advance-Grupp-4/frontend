@@ -2,134 +2,131 @@ import { useNavigate } from "react-router-dom";
 import QRCodeScanner from "../components/QRCodeScanner";
 import { useState } from "react";
 import { useAuth } from "../../../common/src/hooks/auth/AuthProvider";
-import type {
-	Shipment,
-	ShipmentStatus,
-} from "../../../common/src/types/shipment";
+import type { Shipment } from "../../../common/src/types/shipment";
 import {
-	updateShipment,
 	getShipmentById,
+	updateShipmentStatus,
 } from "../../../common/src/lib/shipmentApi";
 
-export default function ScanParcel() {
+export default function ScanParcelCustomer() {
 	const navigate = useNavigate();
 	const { user } = useAuth();
 
 	const [loading, setLoading] = useState(false);
 	const [message, setMessage] = useState<string | null>(null);
 	const [scannerActive, setScannerActive] = useState(true);
-	const [scannedValue, setScannedValue] = useState<string | null>(null);
-	const [shipmentInfo, setShipmentInfo] = useState<Shipment | null>(null);
+	const [shipment, setShipment] = useState<Shipment | null>(null);
 
-	// ---------------- SCAN HANDLER ----------------
+	/** ✅ Extract UUID from QR */
+	const extractId = (value: string): string | null => {
+		const trimmed = value.trim();
+
+		if (trimmed.startsWith("parcel:")) {
+			const id = trimmed.replace("parcel:", "").trim();
+			return /^[0-9a-fA-F-]{36}$/.test(id) ? id : null;
+		}
+
+		if (/^[0-9a-fA-F-]{36}$/.test(trimmed)) return trimmed;
+
+		const match = trimmed.match(
+			/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89ab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}/i
+		);
+		return match ? match[0] : null;
+	};
+
+	/** ✅ When QR is scanned */
 	const handleScan = async (value: string) => {
-		setScannedValue(value);
 		setScannerActive(false);
 		setMessage(null);
 
-		// Extract UUID
-		const uuidMatch = value.match(
-			/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/
-		);
-		const shipmentId = uuidMatch ? uuidMatch[0] : null;
-
-		if (!shipmentId) {
-			setMessage("❌ Invalid QR code — no shipment ID found.");
+		const id = extractId(value);
+		if (!id) {
+			setMessage("❌ Invalid QR — no shipment ID found");
 			setScannerActive(true);
 			return;
 		}
 
-		await loadShipment(shipmentId);
+		setMessage(`✅ QR recognized\nID: ${id}`);
+		await loadShipment(id);
 	};
 
-	// ---------------- FETCH SHIPMENT ----------------
+	/** ✅ Fetch & validate */
 	const loadShipment = async (id: string) => {
 		try {
 			setLoading(true);
-			setMessage("🔍 Fetching shipment...");
+			setMessage("🔍 Fetching parcel...");
 
-			const shipment = await getShipmentById(id);
-			setShipmentInfo(shipment);
+			const s = await getShipmentById(id);
+			setShipment(s);
 
-			await validateForCustomerDelivery(shipment);
+			// ✅ Must be the receiving customer
+			if (user?.role !== "customer") {
+				setMessage("❌ Only the receiving customer can confirm delivery");
+				return;
+			}
+
+			if (s.receiver_id !== user.id) {
+				setMessage("❌ This parcel belongs to another customer");
+				return;
+			}
+
+			// ✅ Already delivered?
+			if (s.status === "delivered") {
+				setMessage("ℹ️ Already delivered ✅");
+				return;
+			}
+
+			// ✅ Must be in transit
+			if (s.status !== "in_transit") {
+				setMessage(`⚠️ Parcel not ready.\nStatus: ${s.status}`);
+				return;
+			}
+
+			setMessage("✅ Parcel verified.\nPress Confirm Delivery");
 		} catch {
-			setMessage("❌ Shipment not found or no access");
+			setMessage("❌ Parcel not found or no access");
 			setScannerActive(true);
-			setLoading(false);
-		}
-	};
-
-	// ---------------- VALIDATE FOR CUSTOMER DELIVERY ----------------
-	const validateForCustomerDelivery = async (shipment: Shipment) => {
-		// Customer only validation
-		if (user?.role !== "customer") {
-			setMessage("❌ Only the receiving customer can confirm delivery.");
-			setLoading(false);
-			return;
-		}
-
-		// Parcel must belong to this customer
-		if (shipment.receiver_id !== user.id) {
-			setMessage("❌ This parcel belongs to another customer.");
-			setLoading(false);
-			return;
-		}
-
-		// Already delivered?
-		if (shipment.status === "delivered") {
-			setMessage("ℹ️ Parcel already delivered ✅");
-			setLoading(false);
-			return;
-		}
-
-		// Must be in transit
-		if (shipment.status !== "in_transit") {
-			setMessage(
-				`⚠️ Parcel is not ready to be confirmed.\nCurrent status: ${shipment.status}`
-			);
-			setLoading(false);
-			return;
-		}
-
-		// Ready for customer confirmation
-		setMessage('✅ Parcel verified.\nPress "Confirm Delivery" to complete.');
-		setLoading(false);
-	};
-
-	// ---------------- MARK DELIVERED ----------------
-	const confirmDelivery = async (shipment: Shipment) => {
-		try {
-			setMessage(`📦 Marking ${shipment.shipment_number} as delivered...`);
-
-			const updated = await updateShipment(shipment.id, {
-				status: "delivered",
-			});
-			setShipmentInfo(updated);
-
-			setMessage(`🎉 Delivery confirmed for ${updated.shipment_number}!`);
-
-			setTimeout(() => {
-				navigate(`/parcels/${shipment.id}`, { state: { justDelivered: true } });
-			}, 1500);
-		} catch {
-			setMessage("❌ Failed to confirm delivery.");
 		} finally {
 			setLoading(false);
 		}
 	};
 
-	// ---------------- RESET SCAN ----------------
-	const handleRescan = () => {
+	/** ✅ Confirm delivery */
+	const confirmDelivery = async () => {
+		if (!shipment) return;
+
+		try {
+			setLoading(true);
+			setMessage(`📦 Marking ${shipment.shipment_number} as delivered...`);
+
+			const updated = await updateShipmentStatus(shipment.id, "delivered");
+			setShipment(updated);
+
+			setMessage(`🎉 Delivery confirmed for ${updated.shipment_number}!`);
+
+			setTimeout(() => {
+				navigate(`/parcels/${updated.id}`, { state: { justDelivered: true } });
+			}, 1200);
+		} catch {
+			setMessage("❌ Failed to update status");
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	/** ✅ Reset for new scan */
+	const resetScan = () => {
 		setScannerActive(true);
-		setShipmentInfo(null);
+		setShipment(null);
 		setMessage(null);
 		setLoading(false);
 	};
 
-	// ---------------- UI ----------------
 	return (
 		<div className="p-4 max-w-md mx-auto">
-			<h1 className="text-xl font-bold text-center mb-4">Scan Parcel 📦</h1>
+			<h1 className="text-xl font-bold text-center mb-4">
+				Confirm Delivery 📦
+			</h1>
 
 			{scannerActive && (
 				<div className="p-3 border rounded bg-white">
@@ -143,30 +140,22 @@ export default function ScanParcel() {
 				</div>
 			)}
 
-			{shipmentInfo && !loading && message?.includes("Confirm Delivery") && (
-				<div className="mt-3 p-3 border rounded bg-white text-sm">
-					<p>
-						<b>Shipment:</b> {shipmentInfo.shipment_number}
-					</p>
-					<p>
-						<b>Status:</b> {shipmentInfo.status}
-					</p>
-
-					<button
-						onClick={() => confirmDelivery(shipmentInfo)}
-						className="w-full mt-4 py-2 bg-green-600 text-white rounded font-medium"
-					>
-						✅ Confirm Delivery
-					</button>
-				</div>
+			{shipment && message?.includes("Press Confirm") && (
+				<button
+					onClick={confirmDelivery}
+					disabled={loading}
+					className="w-full mt-4 py-2 bg-green-600 text-white rounded font-medium"
+				>
+					✅ Confirm Delivery
+				</button>
 			)}
 
 			{!scannerActive && (
 				<button
-					onClick={handleRescan}
-					className="w-full mt-4 py-2 bg-blue-600 text-white rounded"
+					onClick={resetScan}
+					className="w-full mt-2 py-2 bg-blue-600 text-white rounded"
 				>
-					🔄 Scan Again
+					🔄 Scan Another
 				</button>
 			)}
 
@@ -174,7 +163,7 @@ export default function ScanParcel() {
 				onClick={() => navigate("/parcels")}
 				className="w-full mt-2 py-2 bg-gray-200 rounded"
 			>
-				← Back
+				← Back to My Parcels
 			</button>
 		</div>
 	);
