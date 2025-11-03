@@ -4,6 +4,7 @@ import type { Shipment } from "../../../common/src/types/shipment";
 import Card from "../../../common/src/components/Card";
 import QRCodeDisplay from "../components/QRCodeDisplay";
 import { useAuth } from "../../../common/src/hooks/auth/AuthProvider";
+import { Link } from "react-router-dom";
 import { ShipmentStatusBadge } from "../../../common/src/utils/shipmentStatus";
 
 export default function MyParcels() {
@@ -71,53 +72,57 @@ export default function MyParcels() {
 		s: Shipment,
 		type: "expecting" | "sending" | "history"
 	) => (
-		<Card
-			key={s.id}
-			title={s.shipment_number}
-			subtitle={`Ordered: ${new Date(s.created_at).toLocaleDateString()}`}
-		>
-			{/* From */}
-			{type !== "sending" && (
-				<p className="text-sm text-gray-600 mb-1">
-					<span className="font-medium">From:</span> {s.pickup_address}
-				</p>
-			)}
-
-			{/* To */}
-			{type !== "expecting" && (
-				<p className="text-sm text-gray-600 mb-1">
-					<span className="font-medium">To:</span> {s.delivery_address}
-				</p>
-			)}
-
-			{/* Status */}
-			<p className="text-sm text-gray-600 mb-1">
-				<span className="font-medium">Status:</span>{" "}
-				<ShipmentStatusBadge status={s.status} />
-			</p>
-
-			{/* Temp range */}
-			{s.min_temp !== null && s.max_temp !== null && (
-				<p className="text-sm text-gray-600 mt-1">
-					<span className="font-medium">Temp range:</span> {s.min_temp}°C –{" "}
-					{s.max_temp}°C
-				</p>
-			)}
-
-			{/* QR Code for sender OR driver (not delivered) */}
-			{s.status !== "delivered" &&
-				(s.sender_id === user?.id || user?.role === "driver") && (
-					<div className="mt-4 pt-2 border-t border-gray-200">
-						<QRCodeDisplay
-							value={s.qr_code_value}
-							shipment_number={s.shipment_number}
-							onPrint={() =>
-								console.log(`🖨️ Printing QR for ${s.shipment_number} (${s.id})`)
-							}
-						/>
-					</div>
+		<Link key={s.id} to={`/parcels/${s.id}`}>
+			<Card
+				key={s.id}
+				title={s.shipment_number}
+				subtitle={`Ordered: ${new Date(s.created_at).toLocaleDateString()}`}
+			>
+				{/* From */}
+				{type !== "sending" && (
+					<p className="text-sm text-gray-600 mb-1">
+						<span className="font-medium">From:</span> {s.pickup_address}
+					</p>
 				)}
-		</Card>
+
+				{/* To */}
+				{type !== "expecting" && (
+					<p className="text-sm text-gray-600 mb-1">
+						<span className="font-medium">To:</span> {s.delivery_address}
+					</p>
+				)}
+
+				{/* Status */}
+				<p className="text-sm text-gray-600 mb-1">
+					<span className="font-medium">Status:</span>{" "}
+					<ShipmentStatusBadge status={s.status} />
+				</p>
+
+				{/* Temp range */}
+				{s.min_temp !== null && s.max_temp !== null && (
+					<p className="text-sm text-gray-600 mt-1">
+						<span className="font-medium">Temp range:</span> {s.min_temp}°C –{" "}
+						{s.max_temp}°C
+					</p>
+				)}
+
+				{/* QR Code for sender OR driver (not delivered) */}
+				{s.status !== "delivered" &&
+					(s.sender_id === user?.id || user?.role === "driver") && (
+						<div className="mt-4 pt-2 border-t border-gray-200">
+							<QRCodeDisplay
+								value={s.qr_code_value}
+								shipment_number={s.shipment_number}
+								onPrint={() =>
+									console.log(
+										`🖨️ Printing QR for ${s.shipment_number} (${s.id})`
+									)
+								}
+							/>
+						</div>
+					)}
+			</Card>
+		</Link>
 	);
 
 	return (
