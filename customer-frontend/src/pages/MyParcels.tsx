@@ -4,14 +4,16 @@ import type { Shipment } from "../../../common/src/types/shipment";
 import Card from "../../../common/src/components/Card";
 import QRCodeDisplay from "../components/QRCodeDisplay";
 import { useAuth } from "../../../common/src/hooks/auth/AuthProvider";
-import { getShipmentStatusLabel } from "../../../common/src/utils/shipmentStatus";
+import { ShipmentStatusBadge } from "../../../common/src/utils/shipmentStatus";
 
 export default function MyParcels() {
 	const { user } = useAuth();
 	const [shipments, setShipments] = useState<Shipment[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
-	const [tab, setTab] = useState<"expecting" | "sending" | "history">("expecting");
+	const [tab, setTab] = useState<"expecting" | "sending" | "history">(
+		"expecting"
+	);
 
 	// Fetch shipments + attach QR value
 	useEffect(() => {
@@ -60,7 +62,9 @@ export default function MyParcels() {
 	if (loading) return <p className="text-center p-4">Loading parcels…</p>;
 	if (error) return <p className="text-center text-red-500">{error}</p>;
 	if (shipments.length === 0)
-		return <p className="text-center p-4">You don't have any parcels to view 📭</p>;
+		return (
+			<p className="text-center p-4">You don't have any parcels to view 📭</p>
+		);
 
 	// Standard card UI for customer
 	const renderShipmentCard = (
@@ -89,7 +93,7 @@ export default function MyParcels() {
 			{/* Status */}
 			<p className="text-sm text-gray-600 mb-1">
 				<span className="font-medium">Status:</span>{" "}
-				{getShipmentStatusLabel(s.status)}
+				<ShipmentStatusBadge status={s.status} />
 			</p>
 
 			{/* Temp range */}
@@ -108,9 +112,7 @@ export default function MyParcels() {
 							value={s.qr_code_value}
 							shipment_number={s.shipment_number}
 							onPrint={() =>
-								console.log(
-									`🖨️ Printing QR for ${s.shipment_number} (${s.id})`
-								)
+								console.log(`🖨️ Printing QR for ${s.shipment_number} (${s.id})`)
 							}
 						/>
 					</div>

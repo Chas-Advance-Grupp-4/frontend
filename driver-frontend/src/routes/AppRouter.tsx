@@ -2,10 +2,11 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "../../../common/src/hooks/auth/AuthProvider";
 import ProtectedRoute from "../../../common/src/hooks/auth/ProtectedRoute";
 import LoginPage from "../pages/LoginPage";
-import HomePage from "../pages/HomePage";
 import DriverLayout from "../components/layout/DriverLayout";
 import ScanParcel from "../pages/ScanParcel";
 import NotificationsPage from "../pages/NotificationsPage";
+import Deliveries from "../pages/Deliveries";
+import DeliveryDetails from "../pages/DeliveryDetails";
 
 const router = createBrowserRouter([
 	{ path: "/login", element: <LoginPage /> },
@@ -18,7 +19,11 @@ const router = createBrowserRouter([
 				children: [
 					{
 						path: "/",
-						element: <HomePage />,
+						element: <Deliveries />,
+					},
+					{
+						path: "/deliveries/:id",
+						element: <DeliveryDetails />,
 					},
 					{
 						path: "/scan",
@@ -28,7 +33,6 @@ const router = createBrowserRouter([
 						path: "/notifications",
 						element: <NotificationsPage />,
 					},
-
 					{
 						path: "/settings",
 						element: <div className="p-4">Settings (WIP)</div>,
