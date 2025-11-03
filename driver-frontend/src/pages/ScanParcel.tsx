@@ -86,7 +86,7 @@ export default function DriverScanPickup() {
 
 			setMessage("🚚 Parcel now IN TRANSIT ✅");
 
-			setTimeout(() => navigate("/deliveries"), 1200);
+			setTimeout(() => navigate("/"), 1200);
 		} catch {
 			setMessage("❌ Failed to update status");
 		} finally {
