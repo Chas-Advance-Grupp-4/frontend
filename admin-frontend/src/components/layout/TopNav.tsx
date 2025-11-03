@@ -27,7 +27,7 @@ export default function TopNav() {
 
 	return (
 		<header className="sticky top-0 z-30 border-b bg-bg-default">
-			<div className="mx-auto flex max-w-screen-2xl items-center justify-between px-4 py-3">
+			<nav className="mx-auto flex max-w-screen-2xl items-center justify-between px-4 py-3">
 				{/* Left: logo + brand */}
 				<NavItem to="/">
 					<div className="flex items-center gap-3">
@@ -70,12 +70,12 @@ export default function TopNav() {
 				>
 					☰
 				</button>
-			</div>
+			</nav>
 
 			{/* Mobile nav panel */}
 			{open && (
 				<div className="border-t bg-bg-card px-4 py-2 md:hidden">
-					<div className="flex flex-col gap-1">
+					<nav className="flex flex-col gap-1">
 						<NavItem to="/">Dashboard</NavItem>
 						<NavItem to="/shipments">Shipments</NavItem>
 						<NavItem to="/users">User Management</NavItem>
@@ -91,7 +91,7 @@ export default function TopNav() {
 						>
 							Sign out
 						</button>
-					</div>
+					</nav>
 				</div>
 			)}
 		</header>

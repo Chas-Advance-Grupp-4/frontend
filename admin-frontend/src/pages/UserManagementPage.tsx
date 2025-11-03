@@ -1,13 +1,6 @@
 import React, { useState, useEffect, useRef, use } from "react";
 import { useAuth } from "../../../common/src/hooks/auth/AuthProvider";
-import Card from "../../../common/src/components/Card";
-import Button from "../../../common/src/components/Button";
-import {
-  AdjustmentsVerticalIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/24/outline";
 import { Role, User } from "common/src/types/auth";
-import { Filter } from "lucide-react";
 import FilterUsersByRole from "../components/FilterUsersByRole";
 import CreateUserForm from "../components/CreateUserForm";
 import { http } from "../../../common/src/lib/http";
@@ -66,12 +59,12 @@ export default function UserManagementPage() {
     <div className="p-6 space-y-8">
       <h1 className="text-2xl font-bold">User Management</h1>
 
-      {/* Create new user */}
+      {/*➕👤 Create new user */}
       <CreateUserForm users={users} setUsers={setUsers} />
 
-      {/* Search and filter section */}
+      {/* 🔍 Search and filter section */}
 
-      <form className=" flex flex-wrap gap-4" onSubmit={handleSearch}>
+      <form className="flex flex-wrap gap-4" onSubmit={handleSearch}>
         <SearchUsersField
           allUsers={users}
           roleFilter={roleFilter}

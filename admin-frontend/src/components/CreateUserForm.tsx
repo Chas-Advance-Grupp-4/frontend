@@ -2,6 +2,9 @@ import Button from "../../../common/src/components/Button";
 import { http } from "../../../common/src/lib/http";
 import { User } from "../../../common/src/types/auth";
 import React, { useState } from "react";
+import ToastNotification, {
+  ToastType,
+} from "../../../common/src/components/ToastNotification";
 
 interface Props {
   users: User[];
@@ -18,9 +21,23 @@ const CreateUserForm = ({ users, setUsers }: Props) => {
     role: "customer",
   });
   const [creating, setCreating] = useState(false);
+  const[feedbackShown, setFeedbackShown] = useState(false);
+  const [feedBackMessage, setFeedBackMessage] = useState<string>('');
+  const [feedbackType, setFeedbackType] = useState<ToastType>("success");
+  
   const resetForm = () => {
     setNewUser({ username: "", password: "", role: "customer" });
   }
+
+  const showFeedback = (message:string, type:ToastType) => {
+    setFeedbackShown(true);
+    setFeedbackType(type);
+    setFeedBackMessage(message);
+    setTimeout(() => {
+      setFeedbackShown(false);
+    }, 3000);
+  }
+
   const handleCreateUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setCreating(true);
@@ -31,8 +48,10 @@ const CreateUserForm = ({ users, setUsers }: Props) => {
       });
       setUsers([...users, createdUser]);
       resetForm();
+      showFeedback('User created successfully!', 'success');
     } catch (error) {
       console.error("Failed to create user:", error);
+      showFeedback('Failed to create user. Please try again.', 'error');
     } finally {
       setCreating(false);
     }
@@ -77,6 +96,9 @@ const CreateUserForm = ({ users, setUsers }: Props) => {
           {creating ? "Creating…" : "Add User"}
         </Button>
       </div>
+      {feedbackShown && (
+        <ToastNotification toastType={feedbackType} message={feedBackMessage} />
+      )}
     </form>
   );
 };
