@@ -22,5 +22,5 @@ export interface Shipment {
 	humidity: number | null;
 	pickup_address: string;
 	delivery_address: string;
-	qr_code_value: string;
+	qr_code_value?: string;
 }
