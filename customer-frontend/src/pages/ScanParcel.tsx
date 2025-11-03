@@ -51,56 +51,72 @@ export default function ScanParcel() {
 			const shipment = await getShipmentById(id);
 			setShipmentInfo(shipment);
 
-			await validateAndDeliver(shipment);
-		} catch (err: any) {
-			setMessage(`❌ Shipment not found or no access`);
+			await validateForCustomerDelivery(shipment);
+		} catch {
+			setMessage("❌ Shipment not found or no access");
 			setScannerActive(true);
 			setLoading(false);
 		}
 	};
 
-	// ---------------- VALIDATE ----------------
-	const validateAndDeliver = async (shipment: Shipment) => {
-		const allowedStatuses: ShipmentStatus[] = ["in_transit"];
-
-		if (!allowedStatuses.includes(shipment.status)) {
-			setMessage(`⚠️ Cannot deliver shipment in status: ${shipment.status}`);
+	// ---------------- VALIDATE FOR CUSTOMER DELIVERY ----------------
+	const validateForCustomerDelivery = async (shipment: Shipment) => {
+		// Customer only validation
+		if (user?.role !== "customer") {
+			setMessage("❌ Only the receiving customer can confirm delivery.");
 			setLoading(false);
 			return;
 		}
 
-		// Customer self-delivery allowed (optional)
-		if (user?.role === "customer" && shipment.receiver_id !== user.id) {
-			setMessage(`❌ This shipment belongs to another customer`);
+		// Parcel must belong to this customer
+		if (shipment.receiver_id !== user.id) {
+			setMessage("❌ This parcel belongs to another customer.");
 			setLoading(false);
 			return;
 		}
 
-		await confirmDelivery(shipment);
+		// Already delivered?
+		if (shipment.status === "delivered") {
+			setMessage("ℹ️ Parcel already delivered ✅");
+			setLoading(false);
+			return;
+		}
+
+		// Must be in transit
+		if (shipment.status !== "in_transit") {
+			setMessage(
+				`⚠️ Parcel is not ready to be confirmed.\nCurrent status: ${shipment.status}`
+			);
+			setLoading(false);
+			return;
+		}
+
+		// Ready for customer confirmation
+		setMessage('✅ Parcel verified.\nPress "Confirm Delivery" to complete.');
+		setLoading(false);
 	};
 
-	// ---------------- DELIVER ----------------
+	// ---------------- MARK DELIVERED ----------------
 	const confirmDelivery = async (shipment: Shipment) => {
 		try {
-			setMessage(`✅ Marking ${shipment.shipment_number} as delivered...`);
+			setMessage(`📦 Marking ${shipment.shipment_number} as delivered...`);
 
-			// ✅ USE SHARED HELPER HERE
 			const updated = await updateShipmentStatus(shipment.id, "delivered");
-
-			setMessage(`🎉 Delivered ${updated.shipment_number}!`);
 			setShipmentInfo(updated);
+
+			setMessage(`🎉 Delivery confirmed for ${updated.shipment_number}!`);
 
 			setTimeout(() => {
 				navigate(`/parcel/${shipment.id}`, { state: { justDelivered: true } });
 			}, 1500);
-		} catch (err: any) {
-			setMessage(`❌ Failed to update delivery.`);
+		} catch {
+			setMessage("❌ Failed to confirm delivery.");
 		} finally {
 			setLoading(false);
 		}
 	};
 
-	// ---------------- RESET ----------------
+	// ---------------- RESET SCAN ----------------
 	const handleRescan = () => {
 		setScannerActive(true);
 		setShipmentInfo(null);
@@ -111,7 +127,7 @@ export default function ScanParcel() {
 	// ---------------- UI ----------------
 	return (
 		<div className="p-4 max-w-md mx-auto">
-			<h1 className="text-xl font-bold text-center mb-4">📦 Scan Parcel</h1>
+			<h1 className="text-xl font-bold text-center mb-4">Scan Parcel 📦</h1>
 
 			{scannerActive && (
 				<div className="p-3 border rounded bg-white">
@@ -125,7 +141,7 @@ export default function ScanParcel() {
 				</div>
 			)}
 
-			{shipmentInfo && !loading && message?.startsWith("✅") === false && (
+			{shipmentInfo && !loading && message?.includes("Confirm Delivery") && (
 				<div className="mt-3 p-3 border rounded bg-white text-sm">
 					<p>
 						<b>Shipment:</b> {shipmentInfo.shipment_number}
@@ -133,9 +149,13 @@ export default function ScanParcel() {
 					<p>
 						<b>Status:</b> {shipmentInfo.status}
 					</p>
-					<p>
-						<b>Driver:</b> {shipmentInfo.driver_id?.slice(0, 8)}...
-					</p>
+
+					<button
+						onClick={() => confirmDelivery(shipmentInfo)}
+						className="w-full mt-4 py-2 bg-green-600 text-white rounded font-medium"
+					>
+						✅ Confirm Delivery
+					</button>
 				</div>
 			)}
 
