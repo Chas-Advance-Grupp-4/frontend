@@ -3,6 +3,7 @@ import QRCodeScanner from "../components/QRCodeScanner";
 import { useState } from "react";
 import { useAuth } from "../../../common/src/hooks/auth/AuthProvider";
 import type { Shipment, ShipmentStatus } from "../../../common/src/types/shipment";
+import { getShipmentById, updateShipmentStatus } from "../../../common/src/lib/shipmentApi";
 
 export default function ScanParcel() {
   const navigate = useNavigate();
@@ -53,31 +54,8 @@ export default function ScanParcel() {
     setLoading(true);
     setMessage("🔍 Fetching shipment details...");
 
-    try {
-      const apiBase = import.meta.env.VITE_API_URL || "http://localhost:8000";
-      const token = localStorage.getItem("access_token");
-
-      const response = await fetch(`${apiBase}/v1/shipments/${shipmentId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token && { Authorization: `Bearer ${token}` }),
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 404) {
-          setMessage(`❌ Shipment not found: ${shipmentId}`);
-        } else {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.detail || `HTTP ${response.status}`);
-        }
-        setScannerActive(true);
-        setLoading(false);
-        return;
-      }
-
-      const shipment = (await response.json()) as Shipment;
+        try {
+      const shipment = await getShipmentById(shipmentId);
       setShipmentInfo(shipment);
       await validateAndUpdateShipment(shipment);
     } catch (error: any) {
@@ -86,12 +64,46 @@ export default function ScanParcel() {
       setScannerActive(true);
       setLoading(false);
     }
+
+    // try {
+    //   const apiBase = import.meta.env.VITE_API_URL || "http://localhost:8000";
+    //   const token = localStorage.getItem("access_token");
+
+    //   const response = await fetch(`${apiBase}/v1/shipments/${shipmentId}`, {
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       ...(token && { Authorization: `Bearer ${token}` }),
+    //     },
+    //   });
+
+    //   if (!response.ok) {
+    //     if (response.status === 404) {
+    //       setMessage(`❌ Shipment not found: ${shipmentId}`);
+    //     } else {
+    //       const errorData = await response.json().catch(() => ({}));
+    //       throw new Error(errorData.detail || `HTTP ${response.status}`);
+    //     }
+    //     setScannerActive(true);
+    //     setLoading(false);
+    //     return;
+    //   }
+
+    //   const shipment = (await response.json()) as Shipment;
+    //   setShipmentInfo(shipment);
+    //   await validateAndUpdateShipment(shipment);
+    // } catch (error: any) {
+    //   console.error("Error fetching shipment:", error);
+    //   setMessage(`❌ Error Loading Shipment: ${error.message}`);
+    //   setScannerActive(true);
+    //   setLoading(false);
+    // }
   };
 
   const validateAndUpdateShipment = async (shipment: Shipment) => {
-    const validDeliveryStates: ShipmentStatus[] = ["ASSIGNED", "IN_TRANSIT"];
+    const validDeliveryStates: ShipmentStatus[] = ["assigned", "in_transit"];
     if (!validDeliveryStates.includes(shipment.status)) {
-      if (shipment.status === "DELIVERED") {
+      if (shipment.status === "delivered") {
         setMessage(`ℹ️ Already Delivered — ${shipment.shipment_number}`);
       } else {
         setMessage(`⚠️ Cannot deliver in status: ${shipment.status}`);
@@ -111,36 +123,14 @@ export default function ScanParcel() {
       return;
     }
 
-    await updateShipmentStatus(shipment);
+    await updateTheShipmentStatus(shipment);
   };
 
-  const updateShipmentStatus = async (shipment: Shipment) => {
+  const updateTheShipmentStatus = async (shipment: Shipment) => {
     setMessage(`✅ Marking #${shipment.shipment_number} as delivered...`);
 
-    try {
-      const apiBase = import.meta.env.VITE_API_URL || "http://localhost:8000";
-      const token = localStorage.getItem("access_token");
-
-      // Backend expects status in query param
-      const updateUrl = `${apiBase}/v1/shipments/${shipment.id}?status=DELIVERED`;
-
-      const response = await fetch(updateUrl, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token && { Authorization: `Bearer ${token}` }),
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        if (response.status === 404) throw new Error("Shipment not found");
-        if (response.status === 401) throw new Error("Authentication required");
-        if (response.status === 403) throw new Error("Permission denied");
-        throw new Error(errorData.detail || `Update failed (HTTP ${response.status})`);
-      }
-
-      const updatedShipment = (await response.json()) as Shipment;
+        try {
+      const updatedShipment = await updateShipmentStatus(shipment.id, "delivered");
       setMessage(`🎉 Delivery Confirmed — ${updatedShipment.shipment_number}`);
       setTimeout(() => {
         navigate(`/parcel/${shipment.id}`, {
@@ -152,6 +142,42 @@ export default function ScanParcel() {
       setMessage(`❌ Update Failed: ${error.message}`);
       setLoading(false);
     }
+
+    // try {
+    //   const apiBase = import.meta.env.VITE_API_URL || "http://localhost:8000";
+    //   const token = localStorage.getItem("access_token");
+
+    //   // Backend expects status in query param
+    //   const updateUrl = `${apiBase}/v1/shipments/${shipment.id}?status=delivered`;
+
+    //   const response = await fetch(updateUrl, {
+    //     method: "PATCH",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       ...(token && { Authorization: `Bearer ${token}` }),
+    //     },
+    //   });
+
+    //   if (!response.ok) {
+    //     const errorData = await response.json().catch(() => ({}));
+    //     if (response.status === 404) throw new Error("Shipment not found");
+    //     if (response.status === 401) throw new Error("Authentication required");
+    //     if (response.status === 403) throw new Error("Permission denied");
+    //     throw new Error(errorData.detail || `Update failed (HTTP ${response.status})`);
+    //   }
+
+    //   const updatedShipment = (await response.json()) as Shipment;
+    //   setMessage(`🎉 Delivery Confirmed — ${updatedShipment.shipment_number}`);
+    //   setTimeout(() => {
+    //     navigate(`/parcel/${shipment.id}`, {
+    //       state: { justDelivered: true, shipment: updatedShipment },
+    //     });
+    //   }, 1200);
+    // } catch (error: any) {
+    //   console.error("Error updating shipment:", error);
+    //   setMessage(`❌ Update Failed: ${error.message}`);
+    //   setLoading(false);
+    // }
   };
 
   const handleRescan = () => {
