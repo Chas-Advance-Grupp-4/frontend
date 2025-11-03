@@ -1,44 +1,51 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useRef, useState } from "react";
 import { Role, User } from "../../../common/src/types/auth";
-import Button from "../../../common/src/components/Button";
 
 type Props = {
   allUsers: User[];
   roleFilter: "no filter" | Role;
   inputSearchedUser: string;
-    setInputSearchedUser: React.Dispatch<React.SetStateAction<string>>;
+  setInputSearchedUser: React.Dispatch<React.SetStateAction<string>>;
+  setUsersToDisplay: React.Dispatch<React.SetStateAction<User[]>>;
 };
 
 const SearchUsersField = ({
   allUsers,
   roleFilter,
   inputSearchedUser,
-    setInputSearchedUser,
-  
+  setInputSearchedUser,
+  setUsersToDisplay,
 }: Props) => {
   const [isShowingSearchSuggestions, setIsShowingSearchSuggestions] =
     useState<boolean>(false);
   const [searchSuggestions, setSearchSuggestions] = useState<User[]>([]);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const searchFieldRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    const dismissSearchSuggestions = (e: MouseEvent) => {
+      if (
+        searchFieldRef.current &&
+        !searchFieldRef.current.contains(e.target as Node)
+      ) {
+        setIsShowingSearchSuggestions(false);
+      }
+    };
     document.body.addEventListener("click", dismissSearchSuggestions);
-  }, [inputSearchedUser]);
-
-  const dismissSearchSuggestions = () => {
-    setIsShowingSearchSuggestions(false);
-  };
-
- 
+    return () => {
+      document.body.removeEventListener("click", dismissSearchSuggestions);
+    };
+  }, []);
 
   const handleSearchSuggestions = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputSearchedUser(e.target.value);
     const inputValue = e.target.value;
     // Leave this function if input is empty
     if (inputValue.length === 0) {
-      dismissSearchSuggestions();
+      setIsShowingSearchSuggestions(false);
       setSearchSuggestions([]);
       return;
     }
@@ -57,9 +64,8 @@ const SearchUsersField = ({
     setIsShowingSearchSuggestions(true);
   };
 
-
   return (
-    <div className="flex items-center gap-4 relative">
+    <div ref={containerRef} className="flex items-center gap-4 relative">
       {/* 💬 search field */}
       <input
         ref={searchFieldRef}
@@ -73,16 +79,36 @@ const SearchUsersField = ({
       />
 
       {/*🔍 search button */}
-      <button className="absolute bg-blue-100 h-full rounded-l-lg hover:bg-blue-200 shadow-sm" type="submit">
+      <button
+        className="absolute bg-blue-100 h-full rounded-l-lg hover:bg-blue-200 shadow-sm"
+        type="submit"
+      >
         <MagnifyingGlassIcon className="h-6 w-6 ml-2 text-blue-700" />
       </button>
 
       {/* Search suggestions list 🧐 */}
-      {searchSuggestions.length > 0 ? (
-        <ul className="w-full rounded-2xl shadow-2xl absolute top-12 bg-gray-100 p-2 ">
+      {searchSuggestions.length > 0 && isShowingSearchSuggestions ? (
+        <ul
+          role="listbox"
+          className="w-full rounded-2xl shadow-2xl absolute top-12 bg-gray-100  "
+        >
           {searchSuggestions.map((u) => (
-            <li key={u.id} className="hover:bg-gray-200 p-2 rounded-md">
-              {u.username}
+            <li
+              key={u.id}
+              role="option"
+              className="hover:bg-gray-200 rounded-2xl w-full"
+            >
+              <button
+                onClick={(e) => {
+                  // e.stopPropagation();
+                  setInputSearchedUser(u.username);
+                  setUsersToDisplay([u]);
+                  setIsShowingSearchSuggestions(false);
+                }}
+                className="flex w-full p-2 rounded-2xl text-left"
+              >
+                {u.username}
+              </button>
             </li>
           ))}
         </ul>

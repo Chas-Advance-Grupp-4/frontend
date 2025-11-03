@@ -2,7 +2,7 @@ import ToastNotification from "../../../common/src/components/ToastNotification"
 import Button from "../../../common/src/components/Button";
 import Card from "../../../common/src/components/Card";
 import { http } from "../../../common/src/lib/http";
-import { Role, User } from "../../../common/src/types/auth";
+import { User } from "../../../common/src/types/auth";
 import React, { useState } from "react";
 
 interface Props {
@@ -53,9 +53,11 @@ const DisplayedUsersList = ({ users, setUsers, usersToDisplay }: Props) => {
       const res = await http<void>(`/v1/users/${id}`, {
         method: "DELETE",
       });
-      setUsers(users.filter((u) => u.id !== id));
+        setUsers(users.filter((u) => u.id !== id));
+        showFeedback("User has been deleted successfully!", "success");
     } catch (error) {
-      console.error("Failed to delete user", error);
+        console.error("Failed to delete user", error);
+        showFeedback("Failed to delete user. Please try again.", "error");
     } finally {
       setDeletingId(null);
     }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../../../common/src/hooks/auth/AuthProvider";
 import { Role, User } from "common/src/types/auth";
 import FilterUsersByRole from "../components/FilterUsersByRole";
@@ -80,11 +80,14 @@ export default function UserManagementPage() {
           roleFilter={roleFilter}
           inputSearchedUser={inputSearchedUser}
           setInputSearchedUser={setInputSearchedUser}
+          setUsersToDisplay={setUsersToDisplay}
         />
 
         <FilterUsersByRole
           value={roleFilter}
-          onChange={(e)=>handleFilterByRole(e.target.value as Role | "no filter")}
+          onChange={(e) =>
+            handleFilterByRole(e.target.value as Role | "no filter")
+          }
         />
       </form>
 
