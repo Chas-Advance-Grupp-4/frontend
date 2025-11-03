@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { HomeIcon, QrCodeIcon, BellIcon } from "@heroicons/react/24/outline";
+import { TruckIcon, QrCodeIcon, BellIcon } from "@heroicons/react/24/outline";
 
 function BottomNav() {
 	return (
@@ -14,8 +14,8 @@ function BottomNav() {
 						}`
 					}
 				>
-					<HomeIcon className="h-6 w-6 md:h-7 md:w-7" />
-					<span>Home</span>
+					<TruckIcon className="h-6 w-6 md:h-7 md:w-7" />
+					<span>Deliveries</span>
 				</NavLink>
 
 				{/* Scan */}
