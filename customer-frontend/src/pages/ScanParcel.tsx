@@ -7,7 +7,7 @@ import type {
 	ShipmentStatus,
 } from "../../../common/src/types/shipment";
 import {
-	updateShipmentStatus,
+	updateShipment,
 	getShipmentById,
 } from "../../../common/src/lib/shipmentApi";
 
@@ -101,13 +101,15 @@ export default function ScanParcel() {
 		try {
 			setMessage(`📦 Marking ${shipment.shipment_number} as delivered...`);
 
-			const updated = await updateShipmentStatus(shipment.id, "delivered");
+			const updated = await updateShipment(shipment.id, {
+				status: "delivered",
+			});
 			setShipmentInfo(updated);
 
 			setMessage(`🎉 Delivery confirmed for ${updated.shipment_number}!`);
 
 			setTimeout(() => {
-				navigate(`/parcel/${shipment.id}`, { state: { justDelivered: true } });
+				navigate(`/parcels/${shipment.id}`, { state: { justDelivered: true } });
 			}, 1500);
 		} catch {
 			setMessage("❌ Failed to confirm delivery.");

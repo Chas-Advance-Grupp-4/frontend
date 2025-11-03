@@ -72,7 +72,7 @@ export default function DriverScanParcel() {
 			return;
 		}
 
-		if (shipment.status !== "ASSIGNED") {
+		if (shipment.status !== "assigned") {
 			setMessage(`⚠️ Cannot check in — status: ${shipment.status}`);
 			return;
 		}
