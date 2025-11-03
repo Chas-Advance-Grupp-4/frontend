@@ -1,3 +1,4 @@
+import ToastNotification from "../../../common/src/components/ToastNotification";
 import Button from "../../../common/src/components/Button";
 import Card from "../../../common/src/components/Card";
 import { http } from "../../../common/src/lib/http";
@@ -10,12 +11,8 @@ interface Props {
   usersToDisplay: User[];
 }
 
-const DisplayedUsersList = ({
-  users,
-  setUsers,
-  usersToDisplay,
-}: Props) => {
-  // states for edit
+const DisplayedUsersList = ({ users, setUsers, usersToDisplay }: Props) => {
+  // ✏️ states for edit
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
   const [editData, setEditData] = useState<{
     username: string;
@@ -28,8 +25,22 @@ const DisplayedUsersList = ({
   });
   const [saving, setSaving] = useState(false);
 
-  // states for delete
+  // 🗑️ states for delete
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  // 💬 state for feedback
+  const [feedback, setFeedback] = useState<{
+    message: string;
+    type: "success" | "error";
+    shown: boolean;
+  }>({ message: "", type: "success", shown: false });
+    
+    const showFeedback = (message: string, type: "success" | "error") => {
+      setFeedback({ message, type, shown: true });
+    setTimeout(() => {
+      setFeedback({ message: "", type:'success', shown: false });
+    }, 3000);
+  };
 
   function startEditing(u: User) {
     setEditingUserId(u.id);
@@ -59,8 +70,13 @@ const DisplayedUsersList = ({
       });
       setUsers(users.map((u) => (u.id === id ? updatedUser : u)));
       setEditingUserId(null);
+      showFeedback(
+        `User ${updatedUser.username} has been updated successfully!`,
+        "success"
+      );
     } catch (error) {
       console.error("Failed to update user", error);
+      showFeedback("Failed to update user. Please try again.", "error");
     } finally {
       setSaving(false);
     }
@@ -138,6 +154,9 @@ const DisplayedUsersList = ({
           )}
         </Card>
       ))}
+      {feedback.shown && (
+        <ToastNotification toastType={feedback.type} message={feedback.message} />
+      )}
     </ul>
   );
 };

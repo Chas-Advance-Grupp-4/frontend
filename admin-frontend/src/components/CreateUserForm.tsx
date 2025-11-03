@@ -21,20 +21,20 @@ const CreateUserForm = ({ users, setUsers }: Props) => {
     role: "customer",
   });
   const [creating, setCreating] = useState(false);
-  const[feedbackShown, setFeedbackShown] = useState(false);
-  const [feedBackMessage, setFeedBackMessage] = useState<string>('');
-  const [feedbackType, setFeedbackType] = useState<ToastType>("success");
+    const [feedback, setFeedback] = useState<{
+      message: string;
+      type: "success" | "error";
+      shown: boolean;
+    }>({ message: "", type: "success", shown: false });
   
   const resetForm = () => {
     setNewUser({ username: "", password: "", role: "customer" });
   }
 
   const showFeedback = (message:string, type:ToastType) => {
-    setFeedbackShown(true);
-    setFeedbackType(type);
-    setFeedBackMessage(message);
+    setFeedback({ message, type, shown: true });
     setTimeout(() => {
-      setFeedbackShown(false);
+      setFeedback({ message: "", type:'success', shown: false });
     }, 3000);
   }
 
@@ -48,7 +48,7 @@ const CreateUserForm = ({ users, setUsers }: Props) => {
       });
       setUsers([...users, createdUser]);
       resetForm();
-      showFeedback('User created successfully!', 'success');
+      showFeedback(`User ${createdUser.username} has been created successfully!`, 'success');
     } catch (error) {
       console.error("Failed to create user:", error);
       showFeedback('Failed to create user. Please try again.', 'error');
@@ -96,8 +96,8 @@ const CreateUserForm = ({ users, setUsers }: Props) => {
           {creating ? "Creating…" : "Add User"}
         </Button>
       </div>
-      {feedbackShown && (
-        <ToastNotification toastType={feedbackType} message={feedBackMessage} />
+      {feedback.shown && (
+        <ToastNotification toastType={feedback.type} message={feedback.message} />
       )}
     </form>
   );

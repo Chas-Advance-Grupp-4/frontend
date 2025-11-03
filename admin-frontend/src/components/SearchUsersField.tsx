@@ -1,6 +1,7 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useRef, useState } from "react";
 import { Role, User } from "../../../common/src/types/auth";
+import Button from "../../../common/src/components/Button";
 
 type Props = {
   allUsers: User[];
@@ -30,9 +31,7 @@ const SearchUsersField = ({
     setIsShowingSearchSuggestions(false);
   };
 
-  const handleShowSearchSuggestions = () => {
-    // This function can be expanded if needed
-  };
+ 
 
   const handleSearchSuggestions = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputSearchedUser(e.target.value);
@@ -58,9 +57,6 @@ const SearchUsersField = ({
     setIsShowingSearchSuggestions(true);
   };
 
-  const showResults = () => {
-    // setIsShowingResults(true);
-  };
 
   return (
     <div className="flex items-center gap-4 relative">
@@ -68,7 +64,7 @@ const SearchUsersField = ({
       <input
         ref={searchFieldRef}
         type="search"
-        className="border rounded p-2 flex-1"
+        className="rounded-lg p-2 flex-1 pl-9 placeholder:text-gray-500 shadow-md hover:shadow-lg"
         placeholder="Search by username"
         value={inputSearchedUser}
         onChange={(e) => {
@@ -77,8 +73,8 @@ const SearchUsersField = ({
       />
 
       {/*🔍 search button */}
-      <button className="absolute right-2" onClick={showResults} type="submit">
-        <MagnifyingGlassIcon className="h-6 w-6" />
+      <button className="absolute bg-blue-100 h-full rounded-l-lg hover:bg-blue-200 shadow-sm" type="submit">
+        <MagnifyingGlassIcon className="h-6 w-6 ml-2 text-blue-700" />
       </button>
 
       {/* Search suggestions list 🧐 */}

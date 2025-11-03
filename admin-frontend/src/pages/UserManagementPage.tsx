@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, use } from "react";
+import React, { useState, useEffect} from "react";
 import { useAuth } from "../../../common/src/hooks/auth/AuthProvider";
 import { Role, User } from "common/src/types/auth";
 import FilterUsersByRole from "../components/FilterUsersByRole";
@@ -37,7 +37,7 @@ export default function UserManagementPage() {
     setUsersToDisplay(users);
   }, [users]);
 
-  // 🔍 Handle search form submission
+  // 🔍 Filter users based on search input and selected role
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     const filteredUsers = users.filter((u) => {
@@ -47,6 +47,16 @@ export default function UserManagementPage() {
         .toLowerCase()
         .includes(inputSearchedUser.toLowerCase());
       return matchesRole && matchesUsername;
+    });
+    setUsersToDisplay(filteredUsers);
+  };
+
+  const handleFilterByRole = (role: Role | "no filter") => {
+    setRoleFilter(role);
+    // Apply filtering based on the new role
+    const filteredUsers = users.filter((u) => {
+      const matchesRole = role === "no filter" ? true : u.role === role;
+      return matchesRole;
     });
     setUsersToDisplay(filteredUsers);
   };
@@ -74,7 +84,7 @@ export default function UserManagementPage() {
 
         <FilterUsersByRole
           value={roleFilter}
-          onChange={(e) => setRoleFilter(e.target.value as Role | "no filter")}
+          onChange={(e)=>handleFilterByRole(e.target.value as Role | "no filter")}
         />
       </form>
 
