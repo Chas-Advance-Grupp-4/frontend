@@ -20,6 +20,63 @@ frontend/
 - Node.js 22
 - npm 9+
 
+## Tech Stack
+
+### UI Framework & Application Structure
+
+- React 19 – Component-based UI development
+- React Router v7 – Client-side routing & protected routes
+- TypeScript – Strong typing for predictable, safe development
+- Vite – Ultra-fast dev server and bundler
+
+### Design & Component System
+
+- Tailwind CSS v4 – Utility-first styling for rapid UI development
+- Lucide Icons / Heroicons – Modern icon libraries for clean UI
+- clsx – Conditional class handling for components
+- Figma – Design system, UI flows, and prototypes to ensure consistent UX
+
+### State, Data & API Communication
+
+- Axios – HTTP client for REST API communication
+- Shared Common Utilities – Reusable types & helpers across frontends
+- jwt-decode – Client-side JWT payload handling
+
+### Authentication & Access Control
+
+- JWT client logic – Session state via token decoding
+- Protected Routes (React Router) – Role-based access & redirects
+- Backend (FastAPI) handles critical auth functions: token issuing, hashing, rate-limiting
+
+### QR Functionality
+
+- html5-qrcode – Browser-based camera scanning for QR codes
+- react-qr-code / qrcode.react – QR code rendering for delivery flows
+
+### Testing & Code Quality
+
+- Vitest – Test runner
+- React Testing Library + jsdom – UI behavior testing
+- jest-dom – DOM assertion utilities
+- ESLint + TS-ESLint + React Hooks rules – Code quality & standards
+
+### Monorepo & Workspace Architecture
+
+- npm Workspaces – Multi-app structure (customer / admin / driver)
+- Separate scripts for each app: dev, build, lint, preview
+
+### Build & Deployment
+
+- Node 22 – Consistent runtime across environments
+- Docker – Containerized frontend services for development/production
+- GitHub Actions – CI/CD pipeline (test → build → deploy)
+- Azure Static Web Apps – Global edge-hosted frontends
+
+### Monitoring & Observability
+
+- Azure Monitor (SWA) – Logs, metrics, and request tracing
+- Custom console logging – Lightweight client-side observability
+
 ## Getting Started
 
 1. Install dependencies (from root):
