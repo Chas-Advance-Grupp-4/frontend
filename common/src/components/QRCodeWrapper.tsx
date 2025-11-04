@@ -1,0 +1,22 @@
+import { ReactNode, FC } from "react";
+
+export interface QRCodeProps {
+	value: string;
+	shipment_number?: string;
+	onPrint?: () => void;
+}
+
+export interface QRScannerProps {
+	onScan: (value: string) => void;
+	isActive?: boolean;
+}
+
+export const QRContainer: FC<{ title?: string; children: ReactNode }> = ({
+	title,
+	children,
+}) => (
+	<div className="flex flex-col items-center justify-center p-4">
+		{title && <h2 className="text-lg font-semibold mb-4">{title}</h2>}
+		{children}
+	</div>
+);

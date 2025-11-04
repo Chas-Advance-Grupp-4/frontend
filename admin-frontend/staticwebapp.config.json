@@ -3,6 +3,11 @@
 		{
 			"route": "/api/*",
 			"rewrite": "https://grupp4awa.azurewebsites.net/api/*"
+		},
+		{
+			"route": "/*",
+			"serve": "/index.html",
+			"statusCode": 200
 		}
 	]
 }

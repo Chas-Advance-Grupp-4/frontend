@@ -1,0 +1,87 @@
+name: Frontend Deployment - Staging, Production & Previews (Azure SWA)
+
+on:
+    push:
+        branches:
+            - develop
+            - main
+    pull_request:
+        types: [opened, synchronize, reopened, closed]
+
+jobs:
+    deploy:
+        name: Deploy ${{ matrix.app }} Frontend
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                app: [admin, customer, driver]
+
+        if: |
+            github.ref == 'refs/heads/develop' ||
+            github.ref == 'refs/heads/main' ||
+            (github.event_name == 'pull_request' && github.event.action != 'closed')
+
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  submodules: true
+                  lfs: false
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+
+            - name: Build and Deploy ${{ matrix.app }} to Azure SWA
+              uses: Azure/static-web-apps-deploy@v1
+              with:
+                  ###### Tokens per app & environment ######
+                  azure_static_web_apps_api_token: >-
+                      ${{
+                        github.ref == 'refs/heads/main' &&
+                          (matrix.app == 'admin'    && secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GRAY_FLOWER_0469D3603   ||
+                           matrix.app == 'customer' && secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_JOLLY_MOSS_0F56B0603    ||
+                           matrix.app == 'driver'   && secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_HAPPY_FOREST_03E248603)
+                        ||
+                          (matrix.app == 'admin'    && secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GRAY_DESERT_0157FA003   ||
+                           matrix.app == 'customer' && secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_AMBITIOUS_SEA_0FD974703||
+                           matrix.app == 'driver'   && secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GENTLE_STONE_0CAF78303)
+                      }}
+                  repo_token: ${{ secrets.GITHUB_TOKEN }}
+                  action: "upload"
+
+                  ###### Repository/Build Configurations ######
+                  app_location: ./${{ matrix.app }}-frontend
+                  api_location: ""
+                  output_location: dist
+                  ###### End ######
+              env:
+                  VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+
+    close_preview:
+        name: Close Preview Environments
+        runs-on: ubuntu-latest
+        if: github.event_name == 'pull_request' && github.event.action == 'closed'
+
+        strategy:
+            matrix:
+                app: [admin, customer, driver]
+
+        steps:
+            - name: Close ${{ matrix.app }} Preview
+              uses: Azure/static-web-apps-deploy@v1
+              with:
+                  action: close
+                  repo_token: ${{ secrets.GITHUB_TOKEN }}
+                  azure_static_web_apps_api_token: >-
+                      ${{
+                        github.base_ref == 'main' &&
+                          (matrix.app == 'admin'    && secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GRAY_FLOWER_0469D3603   ||
+                           matrix.app == 'customer' && secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_JOLLY_MOSS_0F56B0603    ||
+                           matrix.app == 'driver'   && secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_HAPPY_FOREST_03E248603)
+                        ||
+                          (matrix.app == 'admin'    && secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GRAY_DESERT_0157FA003   ||
+                           matrix.app == 'customer' && secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_AMBITIOUS_SEA_0FD974703||
+                           matrix.app == 'driver'   && secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GENTLE_STONE_0CAF78303)
+                      }}

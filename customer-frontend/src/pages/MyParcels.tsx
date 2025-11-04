@@ -1,129 +1,176 @@
-import React, { useEffect, useState } from "react";
-import { getShipmentsForCurrentUser } from "../../../common/src/lib/shipmentApi";
+import { useEffect, useState, useMemo } from "react";
+import { getMyShipments } from "../../../common/src/lib/shipmentApi";
 import type { Shipment } from "../../../common/src/types/shipment";
 import Card from "../../../common/src/components/Card";
+import QRCodeDisplay from "../components/QRCodeDisplay";
 import { useAuth } from "../../../common/src/hooks/auth/AuthProvider";
+import { Link } from "react-router-dom";
+import { ShipmentStatusBadge } from "../../../common/src/utils/shipmentStatus";
 
 export default function MyParcels() {
-  const { user } = useAuth();
-  const [shipments, setShipments] = useState<Shipment[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [tab, setTab] = useState<"expecting" | "sent">("expecting");
+	const { user } = useAuth();
+	const [shipments, setShipments] = useState<Shipment[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+	const [tab, setTab] = useState<"expecting" | "sending" | "history">(
+		"expecting"
+	);
 
-  useEffect(() => {
-    const fetchShipments = async () => {
-      try {
-        const data = await getShipmentsForCurrentUser();
-        setShipments(data);
-      } catch (err) {
-        console.error(err);
-        setError("Failed to load shipments");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchShipments();
-  }, []);
+	// Fetch shipments + attach QR value
+	useEffect(() => {
+		const fetchShipments = async () => {
+			try {
+				const data = await getMyShipments();
 
-  if (loading) {
-    return <p className="text-center p-4">Loading parcels…</p>;
-  }
+				const shipmentsWithQR = data.map((shipment: Shipment) => ({
+					...shipment,
+					qr_code_value: `parcel:${shipment.id}`,
+				}));
 
-  if (error) {
-    return <p className="text-center text-red-500">{error}</p>;
-  }
+				setShipments(shipmentsWithQR);
+			} catch (err) {
+				console.error(err);
+				setError("Failed to load shipments");
+			} finally {
+				setLoading(false);
+			}
+		};
 
-  if (shipments.length === 0) {
-    return <p className="text-center p-4">You have no parcels to view 📭</p>;
-  }
-  // Separate shipments into "expecting" and "sent"
-  const expecting = shipments.filter((s) => s.receiver_id === user?.id);
-  const sent = shipments.filter((s) => s.sender_id === user?.id);
+		fetchShipments();
+	}, []);
 
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6 text-center">My Parcels 📦</h1>
+	// Derived lists (customer)
+	const expecting = useMemo(
+		() => shipments.filter((s) => s.receiver_id === user?.id),
+		[shipments, user?.id]
+	);
 
-      {/* tabs section */}
-      <div className="flex justify-center mb-6">
-        <button
-          className={`px-4 py-2 rounded-t-lg ${
-            tab === "expecting" ? " font-bold underline underline-offset-8" : ""
-          }`}
-          onClick={() => setTab("expecting")}
-        >
-          Expecting
-        </button>
-        <button
-          className={`px-4 py-2 rounded-t-lg ${
-            tab === "sent" ? " font-bold underline underline-offset-8" : ""
-          }`}
-          onClick={() => setTab("sent")}
-        >
-          Sent by me
-        </button>
-      </div>
+	const sending = useMemo(
+		() => shipments.filter((s) => s.sender_id === user?.id),
+		[shipments, user?.id]
+	);
 
-      {tab === "expecting" ? (
-        <>
-          {/* Expecting */}
-          {/* <h2 className="text-xl font-semibold mt-6 mb-2">Expecting</h2> */}
-          {expecting.length === 0 ? (
-            <p className="text-sm text-gray-500 mb-4">No incoming parcels</p>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-around">
-              {expecting.map((s) => (
-                <Card
-                  key={s.id}
-                  title={s.shipment_number}
-                  subtitle={`Created: ${new Date(
-                    s.created_at
-                  ).toLocaleDateString()}`}
-                >
-                  <p className="text-sm text-gray-600">
-                    <strong>From:</strong> {s.sender_id.slice(0, 8)}…
-                  </p>
-                  {s.driver_id && (
-                    <p className="text-sm text-gray-600">
-                      <strong>Driver:</strong> {s.driver_id.slice(0, 8)}…
-                    </p>
-                  )}
-                </Card>
-              ))}
-            </div>
-          )}
-        </>
-      ) : (
-        <>
-          {/* Sent */}
-          {/* <h2 className="text-xl font-semibold mt-8 mb-2">Sent by me</h2> */}
-          {sent.length === 0 ? (
-            <p className="text-sm text-gray-500 mb-4">No sent parcels</p>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-around">
-              {sent.map((s) => (
-                <Card
-                  key={s.id}
-                  title={s.shipment_number}
-                  subtitle={`Created: ${new Date(
-                    s.created_at
-                  ).toLocaleDateString()}`}
-                >
-                  <p className="text-sm text-gray-600">
-                    <strong>To:</strong> {s.receiver_id.slice(0, 8)}…
-                  </p>
-                  {s.driver_id && (
-                    <p className="text-sm text-gray-600">
-                      <strong>Driver:</strong> {s.driver_id.slice(0, 8)}…
-                    </p>
-                  )}
-                </Card>
-              ))}
-            </div>
-          )}
-        </>
-      )}
-    </div>
-  );
+	const history = useMemo(
+		() =>
+			shipments.filter(
+				(s) =>
+					(s.receiver_id === user?.id || s.sender_id === user?.id) &&
+					["delivered", "cancelled"].includes(s.status)
+			),
+		[shipments, user?.id]
+	);
+
+	if (loading) return <p className="text-center p-4">Loading parcels…</p>;
+	if (error) return <p className="text-center text-red-500">{error}</p>;
+	if (shipments.length === 0)
+		return (
+			<p className="text-center p-4">You don't have any parcels to view 📭</p>
+		);
+
+	// Standard card UI for customer
+	const renderShipmentCard = (
+		s: Shipment,
+		type: "expecting" | "sending" | "history"
+	) => (
+		<Link key={s.id} to={`/parcels/${s.id}`}>
+			<Card
+				key={s.id}
+				title={s.shipment_number}
+				subtitle={`Ordered: ${new Date(s.created_at).toLocaleDateString()}`}
+			>
+				{/* From */}
+				{type !== "sending" && (
+					<p className="text-sm text-gray-600 mb-1">
+						<span className="font-medium">From:</span> {s.pickup_address}
+					</p>
+				)}
+
+				{/* To */}
+				{type !== "expecting" && (
+					<p className="text-sm text-gray-600 mb-1">
+						<span className="font-medium">To:</span> {s.delivery_address}
+					</p>
+				)}
+
+				{/* Status */}
+				<p className="text-sm text-gray-600 mb-1">
+					<span className="font-medium">Status:</span>{" "}
+					<ShipmentStatusBadge status={s.status} />
+				</p>
+
+				{/* Temp range */}
+				{s.min_temp !== null && s.max_temp !== null && (
+					<p className="text-sm text-gray-600 mt-1">
+						<span className="font-medium">Temp range:</span> {s.min_temp}°C –{" "}
+						{s.max_temp}°C
+					</p>
+				)}
+
+				{/* QR Code for sender OR driver (not delivered) */}
+				{s.status !== "delivered" &&
+					(s.sender_id === user?.id || user?.role === "driver") && (
+						<div className="mt-4 pt-2 border-t border-gray-200">
+							<QRCodeDisplay
+								value={s.qr_code_value}
+								shipment_number={s.shipment_number}
+								onPrint={() =>
+									console.log(
+										`🖨️ Printing QR for ${s.shipment_number} (${s.id})`
+									)
+								}
+							/>
+						</div>
+					)}
+			</Card>
+		</Link>
+	);
+
+	return (
+		<div className="p-6">
+			<h1 className="text-2xl font-bold mb-6 text-center">My Parcels 📦</h1>
+
+			{/* Tabs */}
+			<div className="flex justify-center mb-6 space-x-4">
+				{(["expecting", "sending", "history"] as const).map((val) => (
+					<button
+						key={val}
+						className={`px-4 py-2 rounded-t-lg ${
+							tab === val ? "font-bold underline underline-offset-8" : ""
+						}`}
+						onClick={() => setTab(val)}
+					>
+						{val === "expecting" && `Expecting (${expecting.length})`}
+						{val === "sending" && `Sending (${sending.length})`}
+						{val === "history" && `History (${history.length})`}
+					</button>
+				))}
+			</div>
+
+			{/* Tab content */}
+			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-around">
+				{tab === "expecting" &&
+					(expecting.length === 0 ? (
+						<p className="text-sm text-gray-500">No incoming parcels</p>
+					) : (
+						expecting.map((s) => renderShipmentCard(s, "expecting"))
+					))}
+
+				{tab === "sending" &&
+					(sending.length === 0 ? (
+						<p className="text-sm text-gray-500">
+							You are not sending any parcels.
+						</p>
+					) : (
+						sending.map((s) => renderShipmentCard(s, "sending"))
+					))}
+
+				{tab === "history" &&
+					(history.length === 0 ? (
+						<p className="text-sm text-gray-500">No history</p>
+					) : (
+						history.map((s) => renderShipmentCard(s, "history"))
+					))}
+			</div>
+		</div>
+	);
 }

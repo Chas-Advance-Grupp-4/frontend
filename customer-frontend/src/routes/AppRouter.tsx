@@ -6,6 +6,7 @@ import HomePage from "../pages/HomePage";
 import MyParcels from "../pages/MyParcels";
 import CustomerLayout from "../components/layout/CustomerLayout";
 import Scan from "../pages/ScanParcel";
+import ParcelDetails from "../pages/ParcelDetails";
 
 const router = createBrowserRouter([
 	{ path: "/login", element: <LoginPage /> },
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
 					{
 						path: "/parcels",
 						element: <MyParcels />,
+					},
+					{
+						path: "/parcels/:id",
+						element: <ParcelDetails />,
 					},
 					{
 						path: "/scan",
