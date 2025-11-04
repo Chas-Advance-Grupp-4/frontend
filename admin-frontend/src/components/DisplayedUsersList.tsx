@@ -4,6 +4,9 @@ import Card from "../../../common/src/components/Card";
 import { http } from "../../../common/src/lib/http";
 import { User } from "../../../common/src/types/auth";
 import React, { useState } from "react";
+import Option from "../../../common/src/components/form/Option";
+import Select from "../../../common/src/components/form/Select";
+import Input from "../../../common/src/components/form/Input";
 
 interface Props {
   users: User[];
@@ -90,34 +93,32 @@ const DisplayedUsersList = ({ users, setUsers, usersToDisplay }: Props) => {
         <Card key={u.id} title={u.username} subtitle={`Role: ${u.role}`}>
           {editingUserId === u.id ? (
             <div className="space-y-2">
-              <input
+              <Input
                 type="text"
-                className="border rounded p-2 w-full"
                 value={editData.username}
                 onChange={(e) =>
                   setEditData({ ...editData, username: e.target.value })
                 }
               />
-              <input
+              <Input
                 type="password"
-                className="border rounded p-2 w-full"
                 placeholder="New Password (optional)"
                 value={editData.password}
                 onChange={(e) =>
                   setEditData({ ...editData, password: e.target.value })
                 }
               />
-              <select
-                className="border rounded p-2 w-full"
+              <Select
+                // className="border rounded p-2 w-full"
                 value={editData.role}
                 onChange={(e) =>
                   setEditData({ ...editData, role: e.target.value })
                 }
               >
-                <option value="customer">Customer</option>
-                <option value="admin">Admin</option>
-                <option value="driver">Driver</option>
-              </select>
+                <Option value="customer">Customer</Option>
+                <Option value="admin">Admin</Option>
+                <Option value="driver">Driver</Option>
+              </Select>
               <div className="flex gap-2">
                 <Button
                   variant="success"
