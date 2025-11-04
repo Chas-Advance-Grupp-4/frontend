@@ -4,6 +4,9 @@ import Card from "../../../common/src/components/Card";
 import { http } from "../../../common/src/lib/http";
 import { User } from "../../../common/src/types/auth";
 import React, { useState } from "react";
+import Option from "../../../common/src/components/form/Option";
+import Select from "../../../common/src/components/form/Select";
+import Input from "../../../common/src/components/form/Input";
 
 interface Props {
   users: User[];
@@ -34,11 +37,11 @@ const DisplayedUsersList = ({ users, setUsers, usersToDisplay }: Props) => {
     type: "success" | "error";
     shown: boolean;
   }>({ message: "", type: "success", shown: false });
-    
-    const showFeedback = (message: string, type: "success" | "error") => {
-      setFeedback({ message, type, shown: true });
+
+  const showFeedback = (message: string, type: "success" | "error") => {
+    setFeedback({ message, type, shown: true });
     setTimeout(() => {
-      setFeedback({ message: "", type:'success', shown: false });
+      setFeedback({ message: "", type: "success", shown: false });
     }, 3000);
   };
 
@@ -53,11 +56,11 @@ const DisplayedUsersList = ({ users, setUsers, usersToDisplay }: Props) => {
       const res = await http<void>(`/v1/users/${id}`, {
         method: "DELETE",
       });
-        setUsers(users.filter((u) => u.id !== id));
-        showFeedback("User has been deleted successfully!", "success");
+      setUsers(users.filter((u) => u.id !== id));
+      showFeedback("User has been deleted successfully!", "success");
     } catch (error) {
-        console.error("Failed to delete user", error);
-        showFeedback("Failed to delete user. Please try again.", "error");
+      console.error("Failed to delete user", error);
+      showFeedback("Failed to delete user. Please try again.", "error");
     } finally {
       setDeletingId(null);
     }
@@ -90,34 +93,32 @@ const DisplayedUsersList = ({ users, setUsers, usersToDisplay }: Props) => {
         <Card key={u.id} title={u.username} subtitle={`Role: ${u.role}`}>
           {editingUserId === u.id ? (
             <div className="space-y-2">
-              <input
+              <Input
                 type="text"
-                className="border rounded p-2 w-full"
                 value={editData.username}
                 onChange={(e) =>
                   setEditData({ ...editData, username: e.target.value })
                 }
               />
-              <input
+              <Input
                 type="password"
-                className="border rounded p-2 w-full"
                 placeholder="New Password (optional)"
                 value={editData.password}
                 onChange={(e) =>
                   setEditData({ ...editData, password: e.target.value })
                 }
               />
-              <select
-                className="border rounded p-2 w-full"
+              <Select
+                // className="border rounded p-2 w-full"
                 value={editData.role}
                 onChange={(e) =>
                   setEditData({ ...editData, role: e.target.value })
                 }
               >
-                <option value="customer">Customer</option>
-                <option value="admin">Admin</option>
-                <option value="driver">Driver</option>
-              </select>
+                <Option value="customer">Customer</Option>
+                <Option value="admin">Admin</Option>
+                <Option value="driver">Driver</Option>
+              </Select>
               <div className="flex gap-2">
                 <Button
                   variant="success"
@@ -157,7 +158,10 @@ const DisplayedUsersList = ({ users, setUsers, usersToDisplay }: Props) => {
         </Card>
       ))}
       {feedback.shown && (
-        <ToastNotification toastType={feedback.type} message={feedback.message} />
+        <ToastNotification
+          toastType={feedback.type}
+          message={feedback.message}
+        />
       )}
     </ul>
   );
