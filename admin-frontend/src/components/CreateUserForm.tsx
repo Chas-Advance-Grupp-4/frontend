@@ -24,22 +24,22 @@ const CreateUserForm = ({ users, setUsers }: Props) => {
     role: "customer",
   });
   const [creating, setCreating] = useState(false);
-    const [feedback, setFeedback] = useState<{
-      message: string;
-      type: "success" | "error";
-      shown: boolean;
-    }>({ message: "", type: "success", shown: false });
-  
+  const [feedback, setFeedback] = useState<{
+    message: string;
+    type: "success" | "error";
+    shown: boolean;
+  }>({ message: "", type: "success", shown: false });
+
   const resetForm = () => {
     setNewUser({ username: "", password: "", role: "customer" });
-  }
+  };
 
-  const showFeedback = (message:string, type:ToastType) => {
+  const showFeedback = (message: string, type: ToastType) => {
     setFeedback({ message, type, shown: true });
     setTimeout(() => {
-      setFeedback({ message: "", type:'success', shown: false });
+      setFeedback({ message: "", type: "success", shown: false });
     }, 3000);
-  }
+  };
 
   const handleCreateUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -51,10 +51,13 @@ const CreateUserForm = ({ users, setUsers }: Props) => {
       });
       setUsers([...users, createdUser]);
       resetForm();
-      showFeedback(`User ${createdUser.username} has been created successfully!`, 'success');
+      showFeedback(
+        `User ${createdUser.username} has been created successfully!`,
+        "success"
+      );
     } catch (error) {
       console.error("Failed to create user:", error);
-      showFeedback('Failed to create user. Please try again.', 'error');
+      showFeedback("Failed to create user. Please try again.", "error");
     } finally {
       setCreating(false);
     }
@@ -80,7 +83,6 @@ const CreateUserForm = ({ users, setUsers }: Props) => {
           onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
         />
         <Select
-          
           value={newUser.role}
           onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
         >

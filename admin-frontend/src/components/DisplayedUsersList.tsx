@@ -37,11 +37,11 @@ const DisplayedUsersList = ({ users, setUsers, usersToDisplay }: Props) => {
     type: "success" | "error";
     shown: boolean;
   }>({ message: "", type: "success", shown: false });
-    
-    const showFeedback = (message: string, type: "success" | "error") => {
-      setFeedback({ message, type, shown: true });
+
+  const showFeedback = (message: string, type: "success" | "error") => {
+    setFeedback({ message, type, shown: true });
     setTimeout(() => {
-      setFeedback({ message: "", type:'success', shown: false });
+      setFeedback({ message: "", type: "success", shown: false });
     }, 3000);
   };
 
@@ -56,11 +56,11 @@ const DisplayedUsersList = ({ users, setUsers, usersToDisplay }: Props) => {
       const res = await http<void>(`/v1/users/${id}`, {
         method: "DELETE",
       });
-        setUsers(users.filter((u) => u.id !== id));
-        showFeedback("User has been deleted successfully!", "success");
+      setUsers(users.filter((u) => u.id !== id));
+      showFeedback("User has been deleted successfully!", "success");
     } catch (error) {
-        console.error("Failed to delete user", error);
-        showFeedback("Failed to delete user. Please try again.", "error");
+      console.error("Failed to delete user", error);
+      showFeedback("Failed to delete user. Please try again.", "error");
     } finally {
       setDeletingId(null);
     }
@@ -158,7 +158,10 @@ const DisplayedUsersList = ({ users, setUsers, usersToDisplay }: Props) => {
         </Card>
       ))}
       {feedback.shown && (
-        <ToastNotification toastType={feedback.type} message={feedback.message} />
+        <ToastNotification
+          toastType={feedback.type}
+          message={feedback.message}
+        />
       )}
     </ul>
   );

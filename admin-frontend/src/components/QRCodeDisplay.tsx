@@ -1,4 +1,7 @@
-import { QRCodeProps, QRContainer } from "../../../common/src/components/QRCodeWrapper";
+import {
+  QRCodeProps,
+  QRContainer,
+} from "../../../common/src/components/QRCodeWrapper";
 import { QRCodeCanvas } from "qrcode.react";
 
 export default function QRCodeDisplay({ value }: QRCodeProps) {
